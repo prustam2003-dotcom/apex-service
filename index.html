@@ -1469,23 +1469,38 @@ function orderMarket(el){
   const title = el.querySelector('.market-title').textContent;
   const price = el.querySelector('.market-price').textContent;
   openSheet(title, `
-    <div class="sheet-note">${price}. Выберите удобное время — партнёр подтвердит заявку в течение 15 минут.</div>
-    <div class="field-row" id="marketTimeChips">
-      <div class="chip-select active" onclick="selectMarketTime(this)">Сегодня</div>
-      <div class="chip-select" onclick="selectMarketTime(this)">Завтра</div>
-      <div class="chip-select" onclick="selectMarketTime(this)">На выходных</div>
+    <div class="sheet-note">${price}. Партнёр подтвердит заявку в течение 15 минут после оформления.</div>
+    <div class="field-label">Когда</div>
+    <div class="field-row" id="marketDayChips">
+      <div class="chip-select active" onclick="selectMarketDay(this)">Сегодня</div>
+      <div class="chip-select" onclick="selectMarketDay(this)">Завтра</div>
+      <div class="chip-select" onclick="selectMarketDay(this)">На выходных</div>
+    </div>
+    <div class="field-label">Во сколько</div>
+    <div class="field-row" id="marketTimeChips" style="display:grid;grid-template-columns:1fr 1fr;">
+      <div class="chip-select active" onclick="selectMarketTime(this)">09:00–12:00</div>
+      <div class="chip-select" onclick="selectMarketTime(this)">12:00–15:00</div>
+      <div class="chip-select" onclick="selectMarketTime(this)">15:00–18:00</div>
+      <div class="chip-select" onclick="selectMarketTime(this)">18:00–21:00</div>
     </div>
     <div class="sheet-btn" onclick='confirmMarketOrder(${JSON.stringify(title)},${JSON.stringify(price)})'>Заказать</div>
   `);
+}
+function selectMarketDay(el){
+  document.querySelectorAll('#marketDayChips .chip-select').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
 }
 function selectMarketTime(el){
   document.querySelectorAll('#marketTimeChips .chip-select').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
 }
 function confirmMarketOrder(title, price){
-  marketOrdersList.unshift({ title, date: 'только что', price: '−' + price.replace('от ', '') });
+  const day = document.querySelector('#marketDayChips .chip-select.active')?.textContent || 'Сегодня';
+  const time = document.querySelector('#marketTimeChips .chip-select.active')?.textContent || '';
+  const when = day.toLowerCase() + (time ? ', ' + time : '');
+  marketOrdersList.unshift({ title, date: when, price: '−' + price.replace('от ', '') });
   closeSheet();
-  showToast('«' + title + '» — заказ отправлен партнёру');
+  showToast('«' + title + '» — заказ на ' + when + ' отправлен партнёру');
 }
 function marketOrders(){
   const rows = marketOrdersList.map(o => `
