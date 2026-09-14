@@ -695,10 +695,10 @@
                 <div class="market-title">Зарядка электромобиля</div>
                 <div class="market-price">от 900 сум/кВт·ч</div>
               </div>
-              <div class="market-card" onclick="carWashPickup()">
+              <div class="market-card" onclick="openCarWashSite()">
                 <div class="market-ic" style="background:var(--tag-done-bg);"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--ink)" stroke-width="1.8"><path d="M5 11l1.5-5h11L19 11M5 11v7a1 1 0 001 1h1a1 1 0 001-1v-1h8v1a1 1 0 001 1h1a1 1 0 001-1v-7M5 11h14"/></svg></div>
                 <div class="market-title">Мойка авто</div>
-                <div class="market-price">от 40 000 сум · с выездом</div>
+                <div class="market-price">от 40 000 сум · M² Mirabad Skver</div>
               </div>
               <div class="market-card" onclick="orderMarket(this)">
                 <div class="market-ic" style="background:var(--tag-new-bg);"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#4A6FA5" stroke-width="1.8"><path d="M3 3h2l2.4 12.2a2 2 0 002 1.8h7.2a2 2 0 002-1.8L20 7H6"/><circle cx="9" cy="20" r="1.2"/><circle cx="17" cy="20" r="1.2"/></svg></div>
@@ -1786,30 +1786,9 @@ function addCar(){
   myVehicles();
 }
 
-/* ================= CAR WASH · PICKUP & RETURN ================= */
-function carWashPickup(){
-  const car = myCars[0];
-  openSheet('Мойка авто', `
-    <div class="sheet-note">${car ? 'Мойщик заберёт ' + car.plate + ' с парковки' : 'Мойщик заберёт вашу машину с парковки'}, отвезёт на мойку и вернёт на то же место — обычно за 60–90 минут.</div>
-    ${!car ? '<div class="sheet-note" style="margin-top:-10px;color:#B5482F;">Добавьте автомобиль в профиле, чтобы мойщик знал, какую машину забирать.</div>' : ''}
-    <div class="field-row" id="washTimeChips">
-      <div class="chip-select active" onclick="selectWashTime(this)">Сейчас</div>
-      <div class="chip-select" onclick="selectWashTime(this)">Через 30 мин</div>
-      <div class="chip-select" onclick="selectWashTime(this)">Ко времени выезда</div>
-    </div>
-    <div class="sheet-btn" onclick="confirmCarWash()">Вызвать мойщика</div>
-  `);
-}
-function selectWashTime(el){
-  document.querySelectorAll('#washTimeChips .chip-select').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-}
-function confirmCarWash(){
-  const active = document.querySelector('#washTimeChips .chip-select.active');
-  const when = active ? active.textContent.toLowerCase() : 'сейчас';
-  marketOrdersList.unshift({ title: 'Мойка авто', date: 'только что', price: '−40 000 сум' });
-  closeSheet();
-  showToast('Машину заберут ' + when + ' и отвезут на мойку');
+/* ================= CAR WASH · PARTNER SITE (M² Mirabad Skver) ================= */
+function openCarWashSite(){
+  window.open('moyka/index.html', '_blank');
 }
 
 renderChargingCard();
