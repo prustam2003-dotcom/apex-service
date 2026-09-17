@@ -81,6 +81,21 @@
   .mode-toggle:hover{border-color:var(--bronze-soft);transform:rotate(20deg);}
   .burger{display:none;background:none;border:none;color:var(--paper);font-size:22px;cursor:pointer;}
 
+  .nav-left{display:flex;align-items:center;gap:16px;}
+  .back-to-app{
+    display:flex;align-items:center;gap:7px;flex-shrink:0;
+    font-size:11px;text-transform:uppercase;letter-spacing:0.1em;
+    color:var(--stone);border:1px solid var(--line);border-radius:20px;
+    padding:7px 14px 7px 10px;
+    transition:color .25s, border-color .25s;
+  }
+  .back-to-app:hover{color:var(--paper);border-color:var(--bronze-soft);}
+  .back-to-app svg{flex-shrink:0;}
+  @media (max-width:560px){
+    .back-to-app span{display:none;}
+    .back-to-app{padding:9px;border-radius:50%;}
+  }
+
   /* HERO */
   .hero{
     min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;
@@ -495,7 +510,13 @@
 
 <nav>
   <div class="wrap">
-    <div class="logo">M<span class="logo-sq">2</span></div>
+    <div class="nav-left">
+      <a href="../index.html" class="back-to-app" aria-label="Вернуться в Apex Service">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg>
+        <span>Apex Service</span>
+      </a>
+      <div class="logo">M<span class="logo-sq">2</span></div>
+    </div>
     <ul class="nav-links">
       <li><a href="#pricing">Тарифы</a></li>
       <li><a href="#reveal">Подиум</a></li>
@@ -849,6 +870,7 @@
     <button type="button" class="mobile-menu-action" id="mobileStatusTrigger">Загрузка сейчас</button>
     <button type="button" class="mobile-menu-action" id="mobileCabinetTrigger">Кабинет</button>
     <a href="#contacts" class="mobile-menu-action">Контакты</a>
+    <a href="../index.html" class="mobile-menu-action" style="color:var(--bronze-soft);">← Вернуться в Apex Service</a>
   </div>
 </div>
 
