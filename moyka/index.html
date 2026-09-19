@@ -4,508 +4,249 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>M² — Mirabad Skver</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23111D33'/%3E%3Ctext x='12' y='45' font-family='Georgia,serif' font-size='34' fill='%23EAAE4E'%3EM%C2%B2%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23af6446'/%3E%3Ctext x='10' y='45' font-family='Arial,sans-serif' font-weight='700' font-size='32' fill='%23000'%3EM²%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#111D33;
-    --ink-2:#1F3864;
-    --paper:#F4F4EF;
-    --stone:#E0B08E;
-    --stone-dim:#9C7454;
-    --bronze:#B47B56;
-    --bronze-soft:#EAAE4E;
-    --line: rgba(244,244,239,0.10);
-    --line-soft: rgba(244,244,239,0.05);
-  }
-  body.day{
-    --ink:#F4F4EF;
-    --ink-2:#EAE7DD;
-    --paper:#152036;
-    --stone:#8A6B4E;
-    --stone-dim:#B89876;
-    --bronze:#B47B56;
-    --bronze-soft:#C98A2E;
-    --line: rgba(21,32,54,0.12);
-    --line-soft: rgba(21,32,54,0.06);
+    --bone:#f2edde;
+    --rust:#af6446;
+    --ink:#000000;
+    --ink-55: rgba(0,0,0,.55);
+    --ink-30: rgba(0,0,0,.30);
+    --ink-15: rgba(0,0,0,.15);
+    --font-display:'Space Grotesk', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-body:'Inter', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{
-    background:var(--ink);
-    color:var(--paper);
-    font-family:'Inter',sans-serif;
+    background:var(--bone);
+    color:var(--ink);
+    font-family:var(--font-body);
     -webkit-font-smoothing:antialiased;
     overflow-x:hidden;
     position:relative;
-    transition:background .5s ease, color .5s ease;
   }
-  body::before{
-    content:"";
-    position:fixed;inset:0;z-index:1;pointer-events:none;
-    opacity:0.035;mix-blend-mode:overlay;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-  nav, .zone-row, .stat, footer, .btn-line, .btn-solid, .line, .eyebrow-row, .zone-code, .mode-toggle{
-    transition:background-color .5s ease, border-color .5s ease, color .5s ease;
-  }
-  .serif{font-family:'Fraunces',serif;font-optical-sizing:auto;font-weight:400;}
-  .mono{font-family:'IBM Plex Mono',monospace;letter-spacing:0.08em;}
   a{color:inherit;text-decoration:none;}
-  :focus-visible{outline:1px solid var(--bronze-soft); outline-offset:4px;}
+  :focus-visible{outline:1.5px solid var(--rust); outline-offset:3px;}
+  ::selection{background:var(--rust); color:var(--bone);}
 
-  .wrap{max-width:1240px;margin:0 auto;padding:0 40px;}
+  .wrap{max-width:1320px;margin:0 auto;padding:0 32px;}
+  .display{font-family:var(--font-display);font-weight:500;font-size:clamp(36px,7.4vw,60px);line-height:1.05;color:var(--ink);}
+  .display.light{font-weight:300;}
+  .caption{font-size:14px;line-height:1.29;color:var(--ink);}
+  .caption.muted{color:var(--ink-55);}
+  .eyebrow{font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-55);}
 
-  /* NAV */
-  nav{
-    position:fixed;top:0;left:0;right:0;z-index:100;
-    border-bottom:1px solid var(--line-soft);
-    background:color-mix(in srgb, var(--ink) 78%, transparent);
-    backdrop-filter:blur(8px);
-  }
-  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:88px;gap:28px;}
-  .logo{font-family:'Fraunces',serif;font-size:22px;font-weight:500;letter-spacing:0.01em;}
-  .logo-sq{font-size:0.55em;color:var(--bronze-soft);position:relative;top:-0.65em;margin-left:1px;}
-  .nav-links{display:flex;gap:44px;list-style:none;margin-right:auto;margin-left:60px;}
-  .nav-links a{font-size:12px;text-transform:uppercase;letter-spacing:0.14em;color:var(--stone);transition:color .25s;}
-  .nav-links a:hover{color:var(--paper);}
-  .nav-right{display:flex;align-items:center;gap:24px;}
-  .nav-cta{font-size:12px;text-transform:uppercase;letter-spacing:0.14em;color:var(--paper);border-bottom:1px solid var(--bronze-soft);padding-bottom:3px;}
-  .mode-toggle{
-    width:38px;height:38px;border-radius:50%;border:1px solid var(--line);
-    background:transparent;color:var(--paper);cursor:pointer;
-    display:flex;align-items:center;justify-content:center;font-size:15px;
-    transition:border-color .3s, transform .4s;
-  }
-  .mode-toggle:hover{border-color:var(--bronze-soft);transform:rotate(20deg);}
-  .burger{display:none;background:none;border:none;color:var(--paper);font-size:22px;cursor:pointer;}
+  /* SCROLL PROGRESS */
+  .scroll-progress{position:fixed;top:0;left:0;height:2px;width:0%;background:var(--ink);z-index:300;transition:width .1s linear;}
 
-  .nav-left{display:flex;align-items:center;gap:16px;}
-  .back-to-app{
-    display:flex;align-items:center;gap:7px;flex-shrink:0;
-    font-size:11px;text-transform:uppercase;letter-spacing:0.1em;
-    color:var(--stone);border:1px solid var(--line);border-radius:20px;
-    padding:7px 14px 7px 10px;
-    transition:color .25s, border-color .25s;
-  }
-  .back-to-app:hover{color:var(--paper);border-color:var(--bronze-soft);}
+  /* NAV — minimal, text-only wayfinding */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:color-mix(in srgb, var(--bone) 92%, transparent);border-bottom:1px solid var(--ink-15);}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:76px;gap:24px;}
+  .nav-left{display:flex;align-items:center;gap:18px;}
+  .back-to-app{display:flex;align-items:center;gap:7px;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-55);transition:color .2s;}
+  .back-to-app:hover{color:var(--ink);}
   .back-to-app svg{flex-shrink:0;}
-  @media (max-width:560px){
-    .back-to-app span{display:none;}
-    .back-to-app{padding:9px;border-radius:50%;}
+  @media (max-width:560px){.back-to-app span{display:none;}}
+  .logo{font-family:var(--font-display);font-weight:500;font-size:21px;letter-spacing:-0.01em;}
+  .logo sup{font-size:0.55em;color:var(--rust);}
+  .nav-right{display:flex;align-items:center;gap:28px;}
+  .nav-action{background:none;border:none;font-family:var(--font-body);font-size:12px;text-transform:uppercase;letter-spacing:0.12em;color:var(--ink-55);cursor:pointer;transition:color .2s;padding:0;}
+  .nav-action:hover{color:var(--ink);}
+  .nav-action.live{display:flex;align-items:center;gap:7px;}
+  .live-dot{display:inline-block;width:6px;height:6px;background:var(--ink);border-radius:50%;animation:pulse 1.8s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+  @media (max-width:640px){.nav-action-label{display:none;}}
+
+  /* LINKS / BUTTONS — flat, no fills except black ink */
+  .link-arrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink);border-bottom:1px solid var(--ink);padding-bottom:4px;transition:opacity .25s;}
+  .link-arrow:hover{opacity:.55;}
+  .btn-ink{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--ink);color:var(--bone);font-family:var(--font-body);font-weight:500;font-size:13px;text-transform:uppercase;letter-spacing:0.08em;padding:16px 26px;border:1px solid var(--ink);cursor:pointer;transition:opacity .25s;}
+  .btn-ink:hover{opacity:.8;}
+  .btn-ink:disabled{opacity:.3;cursor:not-allowed;}
+  .btn-ghost{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:transparent;color:var(--ink);font-family:var(--font-body);font-size:13px;text-transform:uppercase;letter-spacing:0.08em;padding:15px 25px;border:1px solid var(--ink);cursor:pointer;transition:background .25s,color .25s;}
+  .btn-ghost:hover{background:var(--ink);color:var(--bone);}
+
+  /* HERO — image row + monumental display word */
+  .hero{padding:112px 0 0;}
+  .hero-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--ink);border-bottom:none;}
+  .hero-row figure{margin:0;border-right:1px solid var(--ink);height:46vh;min-height:260px;display:flex;flex-direction:column;}
+  .hero-row figure:last-child{border-right:none;}
+  .hero-row img{width:100%;height:100%;object-fit:cover;display:block;}
+  .hero-row figcaption{padding:10px 14px;font-size:14px;border-top:1px solid var(--ink);}
+  @media (max-width:820px){
+    .hero-row{grid-template-columns:1fr;}
+    .hero-row figure{border-right:none;border-bottom:1px solid var(--ink);height:38vh;}
   }
 
-  /* HERO */
-  .hero{
-    min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;
-    padding-top:88px;padding-bottom:80px;position:relative;
-  }
-  .hero-top{
-    padding-top:120px;
-    display:flex;justify-content:space-between;align-items:flex-start;
-    border-bottom:1px solid var(--line-soft);padding-bottom:56px;margin-bottom:56px;
-  }
-  .hero-loc{font-family:'Fraunces',serif;font-style:italic;font-size:16px;color:var(--stone);letter-spacing:0.01em;max-width:320px;line-height:1.6;}
-  .hero-index{font-size:12px;color:var(--stone-dim);text-align:right;letter-spacing:0.14em;}
-  .hero h1{
-    font-family:'Fraunces',serif;font-weight:400;
-    font-size:clamp(42px,8vw,108px);
-    line-height:0.96;letter-spacing:-0.01em;
-    max-width:1000px;
-  }
-  .hero h1 em{font-style:italic;color:var(--bronze-soft);}
-  .hero-foot{
-    display:flex;justify-content:space-between;align-items:flex-end;
-    margin-top:64px;gap:40px;flex-wrap:wrap;
-  }
-  .hero-sub{max-width:440px;font-size:17px;line-height:1.75;color:var(--stone);}
-  .hero-cta{display:flex;gap:0;align-items:center;gap:28px;}
-  .scroll-cue{
-    position:absolute;left:50%;bottom:26px;transform:translateX(-50%);
-    display:flex;flex-direction:column;align-items:center;gap:10px;
-    color:var(--stone-dim);z-index:2;
-  }
-  .scroll-cue-line{width:1px;height:36px;background:var(--line);position:relative;overflow:hidden;}
-  .scroll-cue-line::after{
-    content:"";position:absolute;top:-100%;left:0;width:100%;height:100%;
-    background:var(--bronze-soft);animation:scrollLine 2.4s ease-in-out infinite;
-  }
-  @keyframes scrollLine{0%{top:-100%;}55%{top:100%;}100%{top:100%;}}
-  .scroll-cue-text{font-size:10px;letter-spacing:0.22em;text-transform:uppercase;}
-  @media (max-width:900px){.scroll-cue{display:none;}}
-  @media (prefers-reduced-motion:reduce){.scroll-cue-line::after{animation:none;top:0;}}
-  .btn-line{
-    font-size:13px;text-transform:uppercase;letter-spacing:0.1em;
-    padding-bottom:6px;border-bottom:1px solid var(--paper);
-    transition:opacity .3s;
-  }
-  .btn-line:hover{opacity:0.6;}
-  .btn-solid{
-    padding:16px 30px;background:var(--paper);color:var(--ink);
-    font-size:13px;text-transform:uppercase;letter-spacing:0.1em;font-weight:500;
-    transition:background .3s;
-  }
-  .btn-solid:hover{background:var(--bronze-soft);}
+  .hero-body{padding:48px 0 70px;display:flex;justify-content:space-between;align-items:flex-end;gap:48px;flex-wrap:wrap;}
+  .hero-mark{display:flex;flex-direction:column;gap:14px;}
+  .hero-loc{font-size:14px;color:var(--ink-55);}
+  .hero-title{font-family:var(--font-display);font-weight:500;font-size:clamp(40px,8vw,92px);line-height:0.98;letter-spacing:-0.01em;}
+  .hero-right{max-width:420px;display:flex;flex-direction:column;gap:22px;}
+  .hero-sub{font-size:16px;line-height:1.5;color:var(--ink);}
+  .hero-cta{display:flex;gap:24px;align-items:center;flex-wrap:wrap;}
 
   /* SECTION SHARED */
   section{position:relative;}
-  .section-pad{padding:150px 0;}
-  .eyebrow-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:70px;border-bottom:1px solid var(--line-soft);padding-bottom:28px;flex-wrap:wrap;gap:16px;}
-  .eyebrow{font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--stone);}
-  .section-title{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(30px,4vw,50px);line-height:1.05;max-width:640px;}
-  .section-title em{font-style:italic;color:var(--bronze-soft);}
-  .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s ease, transform .8s ease;}
+  .section-pad{padding:96px 0;border-top:1px solid var(--ink-15);}
+  .section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:60px;flex-wrap:wrap;}
+  .section-index{font-size:14px;color:var(--ink-55);text-align:right;}
+  .section-intro{font-size:16px;line-height:1.6;color:var(--ink);max-width:52ch;margin-top:18px;}
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease, transform .7s ease;}
   .reveal.in{opacity:1;transform:none;}
+  @media (prefers-reduced-motion: reduce){.reveal{opacity:1;transform:none;transition:none;}}
 
-  /* MANIFESTO */
-  .manifesto-grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:100px;}
-  .manifesto-lead{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(24px,2.6vw,32px);line-height:1.35;}
-  .manifesto-lead em{font-style:italic;color:var(--bronze-soft);}
-  .manifesto-stats{display:flex;flex-direction:column;}
-  .stat{display:flex;justify-content:space-between;align-items:baseline;padding:26px 0;border-top:1px solid var(--line-soft);}
-  .stat:last-child{border-bottom:1px solid var(--line-soft);}
-  .stat b{font-family:'Fraunces',serif;font-weight:400;font-size:34px;color:var(--paper);}
-  .stat span{font-size:13px;color:var(--stone);max-width:220px;text-align:right;line-height:1.6;}
+  /* STATS */
+  .stats-row{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--ink);}
+  .stat{padding:32px 24px 0 0;border-right:1px solid var(--ink);}
+  .stat:last-child{border-right:none;padding-right:0;}
+  .stat b{display:block;font-family:var(--font-display);font-weight:500;font-size:40px;margin-bottom:10px;}
+  .stat span{font-size:14px;color:var(--ink-55);line-height:1.6;}
+  @media (max-width:700px){.stats-row{grid-template-columns:1fr;}.stat{border-right:none;border-top:1px solid var(--ink-15);padding:28px 0 0;}.stat:first-child{border-top:1px solid var(--ink);}}
 
-  /* ZONES — editorial rows, ghost numerals, clickable */
-  .zone-row{
-    display:grid;grid-template-columns:220px 1fr 1fr;gap:50px;
-    padding:56px 0;border-top:1px solid var(--line-soft);
-    align-items:center;position:relative;
-    cursor:pointer;
-  }
-  .zone-row:last-child{border-bottom:1px solid var(--line-soft);}
-  .zone-row:hover{background:color-mix(in srgb, var(--paper) 3%, transparent);}
-  .zone-ghost{
-    font-family:'Fraunces',serif;font-weight:300;font-size:120px;line-height:1;
-    color:transparent;-webkit-text-stroke:1px var(--stone-dim);
-    position:absolute;left:-10px;top:50%;transform:translateY(-50%);
-    pointer-events:none;user-select:none;z-index:0;
-  }
-  .zone-code{font-size:12px;color:var(--bronze-soft);letter-spacing:0.12em;position:relative;z-index:1;}
-  .zone-name{font-family:'Fraunces',serif;font-size:26px;font-weight:400;position:relative;z-index:1;}
-  .zone-desc{font-size:15.5px;color:var(--stone);line-height:1.78;position:relative;z-index:1;padding-right:44px;max-width:52ch;}
-  .zone-toggle{
-    position:absolute;right:0;top:50%;transform:translateY(-50%);
-    width:30px;height:30px;border:1px solid var(--line);border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
-    font-family:'Fraunces',serif;font-size:16px;color:var(--stone);
-    transition:transform .35s ease, color .3s, border-color .3s;
-    z-index:1;
-  }
-  .zone-row.open .zone-toggle{transform:translateY(-50%) rotate(135deg);color:var(--bronze-soft);border-color:var(--bronze-soft);}
-  .zone-extra{
-    grid-column:1/-1;
-    max-height:0;overflow:hidden;opacity:0;
-    transition:max-height .45s ease, opacity .35s ease, margin-top .45s ease;
-    position:relative;z-index:1;
-  }
-  .zone-row.open .zone-extra{max-height:160px;opacity:1;margin-top:22px;}
-  .zone-extra-inner{
-    font-size:14.5px;color:var(--stone);line-height:1.8;
-    border-top:1px solid var(--line-soft);padding-top:20px;max-width:640px;
-  }
-
-  /* JOURNEY */
-  .journey-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--line-soft);}
-  .jstep{padding:40px 32px 0 0;border-right:1px solid var(--line-soft);}
-  .jstep:last-child{border-right:none;}
-  .jstep-num{font-family:'Fraunces',serif;font-style:italic;font-size:15px;color:var(--bronze-soft);margin-bottom:22px;}
-  .jstep h3{font-size:17px;font-weight:500;margin-bottom:12px;letter-spacing:0.01em;}
-  .jstep p{font-size:14.5px;color:var(--stone);line-height:1.78;}
-
-  /* MEMBERSHIP */
-  .membership{border-top:1px solid var(--line-soft);}
-  .membership-inner{padding:150px 0;text-align:center;display:flex;flex-direction:column;align-items:center;}
-  .membership h2{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(32px,5vw,64px);max-width:760px;line-height:1.1;}
-  .membership h2 em{font-style:italic;color:var(--bronze-soft);}
-  .membership p{color:var(--stone);max-width:480px;margin-top:24px;font-size:16px;line-height:1.78;}
-  .membership .btn-solid{margin-top:44px;}
-
-  /* FOOTER */
-  footer{border-top:1px solid var(--line-soft);padding:70px 0 40px;}
-  .footer-top{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:50px;padding-bottom:56px;margin-bottom:32px;border-bottom:1px solid var(--line-soft);}
-  .footer-top h4{font-size:11px;letter-spacing:0.14em;color:var(--stone-dim);text-transform:uppercase;margin-bottom:18px;}
-  .footer-top .serif{font-size:18px;margin-bottom:14px;}
-  .footer-top p, .footer-top a{font-size:14.5px;color:var(--stone);line-height:1.95;display:block;}
-  .footer-top a:hover{color:var(--paper);}
-  .footer-bottom{display:flex;justify-content:space-between;font-size:11.5px;color:var(--stone-dim);flex-wrap:wrap;gap:10px;}
-
-  @media (max-width:900px){
-    .nav-links{display:none;}
-    .cabinet-trigger{display:none;}
-    .burger{display:block;}
-    .manifesto-grid{grid-template-columns:1fr;gap:50px;}
-    .zone-row{grid-template-columns:1fr;gap:14px;padding:44px 0;}
+  /* ZONE ROWS — editorial list, no cards */
+  .zone-row{display:grid;grid-template-columns:110px 1fr 1fr;gap:32px;padding:34px 0;border-top:1px solid var(--ink-15);align-items:center;position:relative;cursor:pointer;}
+  .zone-row:last-child{border-bottom:1px solid var(--ink-15);}
+  .zone-ghost{font-family:var(--font-display);font-weight:300;font-size:15px;color:var(--ink-55);}
+  .zone-code{font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-55);margin-bottom:6px;}
+  .zone-name{font-family:var(--font-display);font-weight:500;font-size:24px;}
+  .zone-desc{font-size:15px;color:var(--ink-55);line-height:1.65;padding-right:40px;max-width:52ch;}
+  .zone-toggle{position:absolute;right:0;top:34px;width:26px;height:26px;border:1px solid var(--ink);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:16px;transition:transform .3s ease;}
+  .zone-row.open .zone-toggle{transform:rotate(135deg);}
+  .zone-extra{grid-column:1/-1;max-height:0;overflow:hidden;opacity:0;transition:max-height .4s ease, opacity .3s ease, margin-top .4s ease;}
+  .zone-row.open .zone-extra{max-height:180px;opacity:1;margin-top:18px;}
+  .zone-extra-inner{font-size:14.5px;color:var(--ink-55);line-height:1.7;border-top:1px solid var(--ink-15);padding-top:18px;max-width:640px;}
+  .zone-extra-cta{margin-top:14px;}
+  @media (max-width:820px){
+    .zone-row{grid-template-columns:1fr;gap:10px;padding:28px 0;}
     .zone-ghost{display:none;}
     .zone-desc{padding-right:0;}
-    .journey-grid{grid-template-columns:1fr 1fr;}
-    .jstep{border-bottom:1px solid var(--line-soft);padding-bottom:32px;margin-bottom:8px;}
-    .footer-top{grid-template-columns:1fr;gap:36px;}
-    .hero-top{flex-direction:column;gap:20px;}
-    .hero-index{text-align:left;}
-  }
-  @media (max-width:560px){
-    .journey-grid{grid-template-columns:1fr;}
-    .jstep{border-right:none;}
-  }
-  @media (prefers-reduced-motion: reduce){
-    .reveal{opacity:1;transform:none;transition:none;}
+    .zone-toggle{top:28px;}
   }
 
-  /* SCROLL PROGRESS */
-  .scroll-progress{
-    position:fixed;top:0;left:0;height:2px;width:0%;
-    background:var(--bronze-soft);z-index:300;
-    transition:width .1s linear;
+  /* SERVICE VISUAL ROWS — photography-led */
+  .zone-row.service-visual-row{display:flex;flex-wrap:wrap;align-items:stretch;gap:0;padding:0;border-top:1px solid var(--ink);}
+  .zone-row.service-visual-row:last-child{border-bottom:1px solid var(--ink);}
+  .zone-row.service-visual-row.reverse{flex-direction:row-reverse;}
+  .service-visual{flex:0 0 42%;min-height:280px;border-right:1px solid var(--ink);overflow:hidden;}
+  .zone-row.service-visual-row.reverse .service-visual{border-right:none;border-left:1px solid var(--ink);}
+  .service-visual img{width:100%;height:100%;object-fit:cover;display:block;}
+  .service-content{flex:1;min-width:260px;padding:36px;position:relative;}
+  .service-visual-row .zone-toggle{right:36px;top:36px;}
+  .service-visual-row .zone-extra{padding:0 36px 36px;flex-basis:100%;}
+  @media (max-width:820px){
+    .zone-row.service-visual-row, .zone-row.service-visual-row.reverse{flex-direction:column;}
+    .service-visual{flex:0 0 auto;width:100%;min-height:220px;border-right:none!important;border-left:none!important;border-bottom:1px solid var(--ink);}
+    .service-content{padding:24px;}
+    .service-visual-row .zone-toggle{right:24px;top:24px;}
+    .service-visual-row .zone-extra{padding:0 24px 24px;}
   }
 
-  /* PHOTO ZOOM ON HOVER */
-  .service-visual{overflow:hidden;}
-  .service-visual img{transition:transform 1.1s cubic-bezier(.16,1,.3,1);}
-  .zone-row:hover .service-visual img{transform:scale(1.08);}
+  /* RUST PANEL — full-bleed room transition */
+  .rust-panel{background:var(--rust);color:var(--ink);border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);position:relative;overflow:hidden;}
+  .podium-spotlight{position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle, rgba(242,237,222,.35) 0%, transparent 70%);pointer-events:none;left:0;top:0;transform:translate(-50%,-50%);opacity:0;transition:opacity .4s ease;}
+  .rust-panel.spotlight-active .podium-spotlight{opacity:1;}
+  .rust-inner{padding:110px 0;position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;gap:24px;}
+  .rust-inner .display{max-width:820px;}
+  .rust-inner p{font-size:17px;line-height:1.65;max-width:560px;}
 
-  /* MAGNETIC BUTTONS */
-  .btn-solid, .btn-line{ will-change: transform; }
+  /* JOURNEY */
+  .journey-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--ink);}
+  .jstep{padding:32px 28px 0 0;border-right:1px solid var(--ink-15);}
+  .jstep:last-child{border-right:none;}
+  .jstep-num{font-family:var(--font-display);font-weight:300;font-size:15px;color:var(--ink-55);margin-bottom:18px;}
+  .jstep h3{font-size:16px;font-weight:600;margin-bottom:10px;}
+  .jstep p{font-size:14px;color:var(--ink-55);line-height:1.65;}
+  @media (max-width:820px){.journey-grid{grid-template-columns:1fr 1fr;}.jstep{border-right:none;border-bottom:1px solid var(--ink-15);padding:26px 0;}}
+  @media (max-width:520px){.journey-grid{grid-template-columns:1fr;}}
 
-  /* CURSOR SPOTLIGHT — раздел «Подиум» */
-  #reveal{position:relative;overflow:hidden;}
-  .podium-spotlight{
-    position:absolute;width:480px;height:480px;border-radius:50%;
-    background:radial-gradient(circle, color-mix(in srgb, var(--bronze-soft) 22%, transparent) 0%, transparent 70%);
-    pointer-events:none;left:0;top:0;
-    transform:translate(-50%,-50%);
-    opacity:0;transition:opacity .4s ease;
-    z-index:0;
-  }
-  #reveal.spotlight-active .podium-spotlight{opacity:1;}
-  #reveal .membership-inner{position:relative;z-index:1;}
+  /* MEMBERSHIP CLOSE */
+  .membership-close{text-align:left;padding:96px 0;border-top:1px solid var(--ink-15);}
+  .membership-close p{font-size:16px;line-height:1.7;color:var(--ink-55);max-width:520px;margin-top:20px;}
+
+  /* FOOTER — rust band */
+  footer{background:var(--rust);border-top:1px solid var(--ink);color:var(--ink);}
+  .footer-top{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:44px;padding:90px 0 48px;border-bottom:1px solid var(--ink);}
+  .footer-top h4{font-size:11px;letter-spacing:0.14em;color:var(--ink-55);text-transform:uppercase;margin-bottom:16px;}
+  .footer-top p, .footer-top a{font-size:14.5px;line-height:1.9;display:block;}
+  .footer-top a{border-bottom:1px solid transparent;transition:border-color .2s;}
+  .footer-top a:hover{border-color:var(--ink);}
+  .footer-bottom{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-55);flex-wrap:wrap;gap:10px;padding:20px 0;}
+  .seal{width:48px;height:48px;border:1px solid var(--ink);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:500;font-size:20px;margin-bottom:18px;}
+  .seal sup{font-size:.55em;}
+  @media (max-width:820px){.footer-top{grid-template-columns:1fr;gap:34px;}}
 
   /* COUNT-UP NUMBERS */
   .count-num{font-variant-numeric:tabular-nums;}
-  @media (prefers-reduced-motion: reduce){
-    .service-visual img{transition:none;}
-  }
 
-  /* SERVICE DETAIL MODAL */
-  .detail-overlay{
-    position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:215;
-    opacity:0;pointer-events:none;transition:opacity .35s ease;
-    display:flex;align-items:center;justify-content:center;padding:24px;
-  }
-  .detail-overlay.open{opacity:1;pointer-events:auto;}
-  .detail-modal{
-    position:relative;background:var(--ink-2);border:1px solid var(--line);
-    width:600px;max-width:100%;max-height:86vh;overflow-y:auto;
-    transform:translateY(16px) scale(0.98);opacity:0;
-    transition:transform .4s cubic-bezier(.2,.8,.2,1), opacity .35s ease;
-  }
-  .detail-overlay.open .detail-modal{transform:translateY(0) scale(1);opacity:1;}
-  .detail-close{
-    position:absolute;top:16px;right:16px;z-index:2;
-    width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.4);
-    border:none;color:#fff;font-size:22px;cursor:pointer;line-height:1;
-  }
-  .detail-photo{width:100%;height:220px;overflow:hidden;}
-  .detail-photo img{width:100%;height:100%;object-fit:cover;filter:saturate(0.85) brightness(0.82);display:block;}
-  .detail-body{padding:36px 40px 40px;}
-  .detail-code{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--bronze-soft);letter-spacing:1.5px;margin-bottom:10px;}
-  .detail-title{font-family:'Fraunces',serif;font-size:28px;color:var(--paper);margin-bottom:12px;}
-  .detail-intro{font-size:14.5px;color:var(--stone);line-height:1.65;margin-bottom:26px;}
-  .detail-list{border-top:1px solid var(--line-soft);margin-bottom:28px;}
-  .detail-item{
-    display:flex;justify-content:space-between;gap:16px;
-    padding:16px 0;border-bottom:1px solid var(--line-soft);
-  }
-  .detail-item-name{font-size:14px;color:var(--paper);}
-  .detail-item-value{font-size:13px;color:var(--bronze-soft);font-family:'IBM Plex Mono',monospace;white-space:nowrap;text-align:right;}
-  @media (max-width:640px){
-    .detail-modal{width:100%;}
-    .detail-body{padding:28px 24px 32px;}
-  }
+  /* OVERLAYS — cabinet / request / status / detail. Flat bone panels, hairline border, no blur, no radius. */
+  .overlay-scrim{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s ease;}
+  .overlay-scrim.open{opacity:1;pointer-events:auto;}
+  @media (prefers-reduced-motion:reduce){.overlay-scrim{transition:none;}}
 
-  /* MONOGRAM SEAL */
-  .monogram-seal{
-    width:52px;height:52px;border:1px solid var(--line);
-    display:flex;align-items:center;justify-content:center;
-    position:relative;flex-shrink:0;
-  }
-  .monogram-seal .m{font-family:'Fraunces',serif;font-size:24px;color:var(--paper);}
-  .monogram-seal .sq{font-family:'Fraunces',serif;font-size:12px;color:var(--bronze-soft);position:relative;top:-9px;}
-
-  /* CABINET TRIGGER */
-  .cabinet-trigger{
-    background:none;border:none;font-family:'Inter',sans-serif;
-    font-size:12px;text-transform:uppercase;letter-spacing:0.14em;
-    color:var(--stone);cursor:pointer;transition:color .25s;
-  }
-  .cabinet-trigger:hover{color:var(--paper);}
-
-  /* CABINET PANEL */
-  .cabinet-overlay{
-    position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:200;
-    opacity:0;pointer-events:none;transition:opacity .35s ease;
-  }
-  .cabinet-overlay.open{opacity:1;pointer-events:auto;}
-  .cabinet-panel{
-    position:fixed;top:0;right:-440px;width:420px;max-width:90vw;height:100%;
-    background:var(--ink-2);border-left:1px solid var(--line);
-    z-index:201;transition:right .45s cubic-bezier(.2,.8,.2,1);
-    overflow-y:auto;padding:44px 36px;
-  }
-  .cabinet-overlay.open .cabinet-panel{right:0;}
+  .cabinet-panel{position:fixed;top:0;right:-460px;width:440px;max-width:92vw;height:100%;background:var(--bone);border-left:1px solid var(--ink);z-index:201;transition:right .4s ease;overflow-y:auto;padding:48px 40px;}
+  .overlay-scrim.open .cabinet-panel{right:0;}
   .cabinet-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:36px;}
-  .cabinet-close{background:none;border:none;color:var(--stone);font-size:26px;cursor:pointer;line-height:1;transition:color .25s;}
-  .cabinet-close:hover{color:var(--paper);}
-  .cabinet-note{font-size:14px;color:var(--stone);line-height:1.75;margin-bottom:30px;}
-  .cabinet-form{display:flex;flex-direction:column;}
-  .cabinet-label{font-size:11px;text-transform:uppercase;letter-spacing:0.12em;color:var(--stone-dim);margin-top:18px;margin-bottom:8px;}
-  .cabinet-label:first-child{margin-top:0;}
-  .cabinet-input{
-    background:transparent;border:none;border-bottom:1px solid var(--line);
-    color:var(--paper);font-family:'Inter',sans-serif;font-size:15.5px;padding:10px 0;
-    width:100%;transition:border-color .25s;
-  }
-  .cabinet-input:focus{outline:none;border-color:var(--bronze-soft);}
-  .cabinet-input::placeholder{color:var(--stone-dim);}
-  .cabinet-greet{font-family:'Fraunces',serif;font-size:23px;margin-bottom:8px;}
-  .cabinet-sub{font-size:13px;color:var(--stone-dim);margin-bottom:30px;}
-  .cabinet-stat-row{display:flex;gap:44px;padding:24px 0;border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);margin-bottom:30px;}
-  .cabinet-stat-num{font-size:30px;}
-  .cabinet-stat-label{font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--stone);margin-top:6px;}
-  .cabinet-promo{margin-bottom:30px;}
-  .cabinet-promo-row{display:flex;gap:16px;align-items:flex-end;}
-  .cabinet-promo-row .cabinet-input{flex:1;}
-  .cabinet-promo-msg{font-size:12.5px;color:var(--bronze-soft);margin-top:12px;min-height:16px;line-height:1.6;}
-  .cabinet-history-list{list-style:none;margin-top:12px;display:flex;flex-direction:column;gap:12px;}
-  .cabinet-history-list li{font-size:13px;color:var(--stone);display:flex;justify-content:space-between;gap:16px;border-bottom:1px dashed var(--line-soft);padding-bottom:9px;line-height:1.5;}
-  .cabinet-empty{color:var(--stone-dim);font-style:italic;}
+  .cabinet-head span{font-family:var(--font-display);font-weight:500;font-size:22px;}
+  .overlay-close{background:none;border:none;color:var(--ink);font-size:26px;cursor:pointer;line-height:1;}
+  .cabinet-note{font-size:14.5px;color:var(--ink-55);line-height:1.7;margin-bottom:28px;}
+  .field-label{font-size:11px;text-transform:uppercase;letter-spacing:0.12em;color:var(--ink-55);margin-top:20px;margin-bottom:8px;}
+  .field-label:first-child{margin-top:0;}
+  .field-input{background:transparent;border:none;border-bottom:1px solid var(--ink);color:var(--ink);font-family:var(--font-body);font-size:15.5px;padding:10px 0;width:100%;}
+  .field-input:focus{outline:none;border-bottom:2px solid var(--ink);}
+  .field-input::placeholder{color:var(--ink-30);}
+  .cabinet-greet{font-family:var(--font-display);font-weight:500;font-size:22px;margin-bottom:6px;}
+  .cabinet-sub{font-size:13px;color:var(--ink-55);margin-bottom:28px;}
+  .cabinet-stat-row{display:flex;gap:40px;padding:22px 0;border-top:1px solid var(--ink-15);border-bottom:1px solid var(--ink-15);margin-bottom:28px;}
+  .cabinet-stat-num{font-family:var(--font-display);font-weight:500;font-size:28px;}
+  .cabinet-stat-label{font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-55);margin-top:6px;}
+  .cabinet-promo{margin-bottom:28px;}
+  .cabinet-promo-row{display:flex;gap:14px;align-items:flex-end;}
+  .cabinet-promo-row .field-input{flex:1;}
+  .cabinet-promo-msg{font-size:12.5px;color:var(--ink-55);margin-top:12px;min-height:16px;line-height:1.6;}
+  .cabinet-history-list{list-style:none;margin-top:12px;display:flex;flex-direction:column;gap:10px;}
+  .cabinet-history-list li{font-size:13px;color:var(--ink-55);display:flex;justify-content:space-between;gap:16px;border-bottom:1px dashed var(--ink-15);padding-bottom:9px;}
+  .cabinet-empty{font-style:italic;}
   @media (max-width:520px){.cabinet-panel{padding:36px 24px;}}
-  @media (prefers-reduced-motion:reduce){.cabinet-panel, .cabinet-overlay{transition:none;}}
 
-  /* REQUEST WIZARD */
-  .request-overlay{
-    position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:210;
-    opacity:0;pointer-events:none;transition:opacity .35s ease;
-    display:flex;align-items:center;justify-content:center;padding:24px;
-  }
-  .request-overlay.open{opacity:1;pointer-events:auto;}
-  .request-modal{
-    position:relative;background:var(--ink-2);border:1px solid var(--line);
-    width:460px;max-width:100%;max-height:88vh;overflow-y:auto;
-    padding:46px 40px;transform:translateY(16px) scale(0.98);opacity:0;
-    transition:transform .4s cubic-bezier(.2,.8,.2,1), opacity .35s ease;
-  }
-  .request-overlay.open .request-modal{transform:translateY(0) scale(1);opacity:1;}
-  .request-close{position:absolute;top:18px;right:18px;}
+  .modal-center{position:relative;background:var(--bone);border:1px solid var(--ink);width:460px;max-width:100%;max-height:88vh;overflow-y:auto;padding:44px 40px;transform:translateY(14px);opacity:0;transition:transform .35s ease, opacity .3s ease;}
+  .overlay-scrim.open .modal-center{transform:translateY(0);opacity:1;}
+  .modal-center.wide{width:640px;padding:0;}
+  @media (prefers-reduced-motion:reduce){.modal-center{transition:none;}}
+  @media (max-width:640px){.modal-center{width:100%;padding:30px 22px;}.modal-center.wide{padding:0;}}
+
   .interest-grid{display:flex;flex-direction:column;gap:10px;}
-  .interest-chip{
-    text-align:left;padding:16px 18px;border:1px solid var(--line);background:transparent;
-    color:var(--paper);font-family:'Inter',sans-serif;font-size:14.5px;cursor:pointer;
-    transition:border-color .25s, background .25s;width:100%;
-  }
-  .interest-chip:hover{border-color:var(--stone);}
-  .interest-chip.selected{border-color:var(--bronze-soft);background:color-mix(in srgb, var(--bronze-soft) 12%, transparent);}
-  .btn-solid:disabled{opacity:0.35;cursor:not-allowed;}
-  .btn-solid:disabled:hover{background:var(--paper);}
-  .zone-extra-cta{margin-top:16px;display:inline-block;}
-  .request-visual{
-    width:100%;height:150px;margin-bottom:22px;
-    border:1px solid var(--line-soft);
-    display:flex;align-items:center;justify-content:center;
-    overflow:hidden;transition:opacity .3s ease;
-  }
+  .interest-chip{text-align:left;padding:16px 18px;border:1px solid var(--ink);background:transparent;color:var(--ink);font-family:var(--font-body);font-size:14.5px;cursor:pointer;width:100%;transition:background .2s,color .2s;}
+  .interest-chip.selected{background:var(--ink);color:var(--bone);}
+  .request-visual{width:100%;height:150px;margin-bottom:22px;border:1px solid var(--ink);overflow:hidden;}
   .request-visual:empty{display:none;margin-bottom:0;}
-  .request-visual img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(0.85) brightness(0.82);}
+  .request-visual img{width:100%;height:100%;object-fit:cover;display:block;}
 
-  /* SERVICE VISUALS — editorial image+text rows */
-  .zone-row.service-visual-row{
-    display:flex;flex-wrap:wrap;align-items:center;gap:52px;
-    padding:52px 0;
-  }
-  .zone-row.service-visual-row.reverse{flex-direction:row-reverse;}
-  .zone-row.service-visual-row .zone-extra{flex-basis:100%;}
-  .service-visual{
-    flex:0 0 260px;height:200px;
-    display:flex;align-items:center;justify-content:center;
-    border:1px solid var(--line-soft);position:relative;z-index:1;
-    overflow:hidden;
-  }
-  .service-visual img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(0.85) brightness(0.82);}
-  .sv-line{stroke:var(--paper);fill:none;stroke-width:1.1;}
-  .sv-accent{stroke:var(--bronze-soft);fill:none;stroke-width:1.1;}
-  .sv-accent-fill{fill:var(--bronze-soft);}
-  .sv-dim{stroke:var(--stone-dim);fill:none;stroke-width:1;}
-  .service-content{flex:1;min-width:260px;position:relative;z-index:1;}
-  @media (max-width:900px){
-    .zone-row.service-visual-row, .zone-row.service-visual-row.reverse{flex-direction:column;align-items:stretch;}
-    .service-visual{flex:0 0 auto;width:100%;}
-  }
-  @media (prefers-reduced-motion:reduce){.request-modal, .request-overlay{transition:none;}}
+  .detail-photo{width:100%;height:260px;overflow:hidden;border-bottom:1px solid var(--ink);}
+  .detail-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+  .detail-body{padding:36px 40px 40px;}
+  .detail-code{font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-55);margin-bottom:10px;}
+  .detail-title{font-family:var(--font-display);font-weight:500;font-size:30px;margin-bottom:14px;}
+  .detail-intro{font-size:14.5px;color:var(--ink-55);line-height:1.65;margin-bottom:26px;}
+  .detail-list{border-top:1px solid var(--ink-15);margin-bottom:28px;}
+  .detail-item{display:flex;justify-content:space-between;gap:16px;padding:15px 0;border-bottom:1px solid var(--ink-15);}
+  .detail-item-name{font-size:14px;}
+  .detail-item-value{font-size:13px;color:var(--ink-55);white-space:nowrap;text-align:right;}
+  @media (max-width:640px){.detail-body{padding:26px 22px 30px;}}
 
-  /* LIVE STATUS */
-  .status-overlay{
-    position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:210;
-    opacity:0;pointer-events:none;transition:opacity .35s ease;
-    display:flex;align-items:center;justify-content:center;padding:24px;
-  }
-  .status-overlay.open{opacity:1;pointer-events:auto;}
-  .status-modal{
-    position:relative;background:var(--ink-2);border:1px solid var(--line);
-    width:440px;max-width:100%;max-height:88vh;overflow-y:auto;
-    padding:44px 40px;transform:translateY(16px) scale(0.98);opacity:0;
-    transition:transform .4s cubic-bezier(.2,.8,.2,1), opacity .35s ease;
-  }
-  .status-overlay.open .status-modal{transform:translateY(0) scale(1);opacity:1;}
-  .status-live-dot{
-    display:inline-block;width:7px;height:7px;border-radius:50%;
-    background:var(--bronze-soft);margin-right:8px;
-    animation:statusPulse 1.8s ease-in-out infinite;
-  }
-  @keyframes statusPulse{0%,100%{opacity:1;}50%{opacity:0.35;}}
-  .status-stat-row{display:flex;gap:36px;margin:26px 0 30px;}
-  .status-stat-num{font-family:'Fraunces',serif;font-size:34px;}
-  .status-stat-label{font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--stone);margin-top:4px;}
-  .bays-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:26px;}
-  .bay-cell{
-    aspect-ratio:1;border:1px solid var(--line);
-    display:flex;align-items:center;justify-content:center;
-    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--stone-dim);
-    transition:background .5s ease, border-color .5s ease, color .5s ease;
-  }
-  .bay-cell.occupied{
-    background:color-mix(in srgb, var(--bronze-soft) 16%, transparent);
-    border-color:var(--bronze-soft);color:var(--bronze-soft);
-  }
-  .status-note{font-size:13px;color:var(--stone-dim);line-height:1.7;margin-bottom:28px;}
-  @media (prefers-reduced-motion:reduce){.status-modal, .status-overlay{transition:none;} .status-live-dot{animation:none;}}
-
-  /* MOBILE MENU */
-  .mobile-menu-overlay{
-    position:fixed;inset:0;background:var(--ink);z-index:230;
-    opacity:0;pointer-events:none;transition:opacity .35s ease;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:44px;
-  }
-  .mobile-menu-overlay.open{opacity:1;pointer-events:auto;}
-  .mobile-menu-close{
-    position:absolute;top:24px;right:22px;background:none;border:none;
-    color:var(--paper);font-size:30px;cursor:pointer;line-height:1;
-  }
-  .mobile-menu-links{display:flex;flex-direction:column;align-items:center;gap:26px;}
-  .mobile-menu-link{
-    font-family:'Fraunces',serif;font-size:30px;color:var(--paper);text-decoration:none;
-  }
-  .mobile-menu-actions{display:flex;flex-direction:column;align-items:center;gap:20px;margin-top:8px;}
-  .mobile-menu-action{
-    background:none;border:none;font-family:'Inter',sans-serif;font-size:12.5px;
-    text-transform:uppercase;letter-spacing:0.14em;color:var(--stone);cursor:pointer;
-    text-decoration:none;padding:0;
-  }
-  @media (prefers-reduced-motion:reduce){.mobile-menu-overlay{transition:none;}}
+  .status-stat-row{display:flex;gap:36px;margin:24px 0 28px;}
+  .status-stat-num{font-family:var(--font-display);font-weight:500;font-size:32px;}
+  .status-stat-label{font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-55);margin-top:4px;}
+  .bays-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:24px;}
+  .bay-cell{aspect-ratio:1;border:1px solid var(--ink);display:flex;align-items:center;justify-content:center;font-family:var(--font-body);font-size:11px;color:var(--ink-55);transition:background .5s ease, color .5s ease;}
+  .bay-cell.occupied{background:var(--ink);color:var(--bone);}
+  .status-note{font-size:13px;color:var(--ink-55);line-height:1.7;margin-bottom:26px;}
 </style>
 </head>
-<body class="day">
+<body>
 <div class="scroll-progress" id="scrollProgress"></div>
 
 <nav>
@@ -515,184 +256,179 @@
         <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg>
         <span>Apex Service</span>
       </a>
-      <div class="logo">M<span class="logo-sq">2</span></div>
+      <div class="logo">M<sup>2</sup></div>
     </div>
-    <ul class="nav-links">
-      <li><a href="#pricing">Тарифы</a></li>
-      <li><a href="#reveal">Подиум</a></li>
-      <li><a href="#partners">Партнёры</a></li>
-      <li><a href="#membership">Членство</a></li>
-    </ul>
     <div class="nav-right">
-      <button class="cabinet-trigger" id="statusTrigger">Загрузка сейчас</button>
-      <button class="cabinet-trigger" id="cabinetTrigger">Кабинет</button>
-      <button class="mode-toggle" id="modeToggle" aria-label="Переключить дневной режим" aria-pressed="true">
-        <span id="modeIcon">☾</span>
-      </button>
-      <a href="#contacts" class="nav-cta">Контакты</a>
-      <button class="burger" id="burgerToggle" aria-label="Меню" aria-expanded="false">☰</button>
+      <button class="nav-action live" id="statusTrigger" type="button"><span class="live-dot"></span><span class="nav-action-label">Загрузка сейчас</span></button>
+      <button class="nav-action" id="cabinetTrigger" type="button">Кабинет</button>
+      <a href="#contacts" class="nav-action">Контакты</a>
     </div>
   </div>
 </nav>
 
 <section class="hero">
   <div class="wrap">
-    <div class="hero-top">
-      <div class="hero-loc">Mirabad Skver · Tashkent</div>
-      <div class="hero-index mono">M² / 2026</div>
+    <div class="hero-row">
+      <figure id="visual-usta">
+        <img src="https://images.unsplash.com/photo-1632823469850-2f77dd9c7f93?w=700&h=600&fit=crop&auto=format&q=80" alt="" loading="lazy">
+        <figcaption>USTA — мойка и детейлинг</figcaption>
+      </figure>
+      <figure>
+        <img src="https://images.unsplash.com/photo-1658052855902-0e3428bd89fc?w=700&h=600&fit=crop&auto=format&q=80" alt="" loading="lazy">
+        <figcaption>Vitrina — шоурум</figcaption>
+      </figure>
+      <figure>
+        <img src="https://images.unsplash.com/photo-1759134248487-e8baaf31e33e?w=700&h=600&fit=crop&auto=format&q=80" alt="" loading="lazy">
+        <figcaption>Ostrie — барбершоп</figcaption>
+      </figure>
     </div>
-    <h1>Мойка,<br>которую <em>не с чем</em><br>сравнить</h1>
-    <div class="hero-foot">
-      <p class="hero-sub">M² — премиальная мойка и детейлинг-мастерская USTA на Мирабад сквере. Приём строго по записи, импортная химия, именной специалист на каждый автомобиль — и ещё пять сервисов рядом, пока вы ждёте.</p>
-      <div class="hero-cta">
-        <a href="#pricing" class="btn-line">Тарифы</a>
-        <button type="button" class="btn-solid request-trigger" data-request="">Записаться</button>
+    <div class="hero-body">
+      <div class="hero-mark">
+        <div class="hero-loc">Mirabad Skver · Tashkent · 2026</div>
+        <div class="hero-title">M²</div>
+      </div>
+      <div class="hero-right">
+        <p class="hero-sub">Премиальная мойка и детейлинг-мастерская USTA на Мирабад сквере — и ещё пять сервисов рядом, пока вы ждёте. Приём строго по записи, импортная химия, именной специалист на каждый автомобиль.</p>
+        <div class="hero-cta">
+          <button type="button" class="btn-ink request-trigger" data-request="">Записаться</button>
+          <a href="#pricing" class="link-arrow">Тарифы →</a>
+        </div>
       </div>
     </div>
   </div>
-  <a href="#pricing" class="scroll-cue" aria-label="Прокрутить к тарифам">
-    <span class="scroll-cue-line"></span>
-    <span class="scroll-cue-text mono">Вниз</span>
-  </a>
 </section>
 
 <section class="section-pad reveal">
   <div class="wrap">
-    <div class="manifesto-grid">
-      <p class="manifesto-lead">Мы не спорим за тех, кому важен ближайший поворот. <em>M² — для тех, кому важен результат</em>: именной специалист, импортная химия и гарантия на каждую работу.</p>
-      <div class="manifesto-stats">
-        <div class="stat"><b>по записи</b><span>без живой очереди — каждый слот закреплён за мастером</span></div>
-        <div class="stat"><b><span class="count-num" data-count="1500">0</span>+ м²</b><span>единого пространства на Мирабад сквере</span></div>
-        <div class="stat"><b>застрахована</b><span>гарантия на детейлинг-работу USTA — по полису, не на словах</span></div>
-      </div>
+    <p class="section-intro" style="font-size:26px;line-height:1.4;max-width:44ch;margin-top:0;">Мы не спорим за тех, кому важен ближайший поворот. <b>M² — для тех, кому важен результат</b>: именной специалист, импортная химия и гарантия на каждую работу.</p>
+    <div class="stats-row">
+      <div class="stat"><b>По записи</b><span>Без живой очереди — каждый слот закреплён за мастером</span></div>
+      <div class="stat"><b><span class="count-num" data-count="1500">0</span>+ м²</b><span>Единого пространства на Мирабад сквере</span></div>
+      <div class="stat"><b>Застрахована</b><span>Гарантия на детейлинг-работу USTA — по полису, не на словах</span></div>
     </div>
   </div>
 </section>
 
 <section id="pricing" class="section-pad reveal">
   <div class="wrap">
-    <div class="eyebrow-row" style="align-items:center;">
+    <div class="section-head">
       <div>
         <span class="eyebrow">Мойка &amp; детейлинг · USTA</span>
-        <h2 class="section-title">Цена — это <em>часть гарантии</em></h2>
+        <div class="display" style="margin-top:14px;">Тарифы</div>
       </div>
-      <div class="service-visual" id="visual-usta" style="flex:0 0 220px;height:170px;" aria-hidden="true">
-        <img src="https://images.unsplash.com/photo-1632823469850-2f77dd9c7f93?w=500&h=400&fit=crop&auto=format&q=80" alt="" loading="lazy">
-      </div>
+      <div class="section-index">01 / Цена — часть гарантии</div>
     </div>
 
     <div class="zone-row">
       <div class="zone-ghost">I</div>
-      <div><div class="zone-code mono">EXPRESS</div><div class="zone-name">от <span class="count-num" data-count="180000">0</span> сум</div></div>
+      <div><div class="zone-code">Express</div><div class="zone-name">от <span class="count-num" data-count="180000">0</span> сум</div></div>
       <div class="zone-desc">Ручная мойка кузова и дисков, экспресс-уборка салона. Именной специалист, 30–40 минут, запись на точное время.</div>
       <div class="zone-toggle">+</div>
-      <div class="zone-extra"><div class="zone-extra-inner">Что входит: активная пена, ручная сушка микрофиброй, чернение резины, экспресс-пылесос салона. Подходит между встречами — забираете машину чистой за 30 минут.<br><button type="button" class="btn-line zone-extra-cta request-trigger" data-request="USTA EXPRESS">Забронировать →</button></div></div>
+      <div class="zone-extra"><div class="zone-extra-inner">Что входит: активная пена, ручная сушка микрофиброй, чернение резины, экспресс-пылесос салона. Подходит между встречами — забираете машину чистой за 30 минут.<br><a href="#" class="link-arrow zone-extra-cta request-trigger" data-request="USTA EXPRESS">Забронировать →</a></div></div>
     </div>
     <div class="zone-row">
       <div class="zone-ghost">II</div>
-      <div><div class="zone-code mono">SIGNATURE</div><div class="zone-name">от <span class="count-num" data-count="420000">0</span> сум</div></div>
+      <div><div class="zone-code">Signature</div><div class="zone-name">от <span class="count-num" data-count="420000">0</span> сум</div></div>
       <div class="zone-desc">Трёхфазная мойка, глубокая химчистка салона, полировка фар, защитный воск. Импортная химия, до 90 минут.</div>
       <div class="zone-toggle">+</div>
-      <div class="zone-extra"><div class="zone-extra-inner">Всё из EXPRESS плюс химчистка сидений и ковров, полировка фар до прозрачности, защитный воск на 4–6 недель. Оптимально перед важной встречей или поездкой.<br><button type="button" class="btn-line zone-extra-cta request-trigger" data-request="USTA SIGNATURE">Забронировать →</button></div></div>
+      <div class="zone-extra"><div class="zone-extra-inner">Всё из Express плюс химчистка сидений и ковров, полировка фар до прозрачности, защитный воск на 4–6 недель. Оптимально перед важной встречей или поездкой.<br><a href="#" class="link-arrow zone-extra-cta request-trigger" data-request="USTA SIGNATURE">Забронировать →</a></div></div>
     </div>
     <div class="zone-row">
       <div class="zone-ghost">III</div>
-      <div><div class="zone-code mono">ULTRA DETAILING</div><div class="zone-name">от <span class="count-num" data-count="950000">0</span> сум</div></div>
-      <div class="zone-desc">Керамическое покрытие, полная химчистка, полировка кузова без потери лака, защита кожи и пластика. Результат подкреплён страховым полисом, не только словом мастера.</div>
+      <div><div class="zone-code">Ultra Detailing</div><div class="zone-name">от <span class="count-num" data-count="950000">0</span> сум</div></div>
+      <div class="zone-desc">Керамическое покрытие, полная химчистка, полировка кузова без потери лака, защита кожи и пластика. Результат подкреплён страховым полисом.</div>
       <div class="zone-toggle">+</div>
-      <div class="zone-extra"><div class="zone-extra-inner">Полная подготовка кузова, керамическое покрытие на 1–2 года, глубокая химчистка кожи и алькантары. Выдаётся именной талон гарантии и страховой полис на результат — включены в стоимость.<br><button type="button" class="btn-line zone-extra-cta request-trigger" data-request="USTA ULTRA DETAILING">Забронировать →</button></div></div>
+      <div class="zone-extra"><div class="zone-extra-inner">Полная подготовка кузова, керамическое покрытие на 1–2 года, глубокая химчистка кожи и алькантары. Выдаётся именной талон гарантии и страховой полис на результат — включены в стоимость.<br><a href="#" class="link-arrow zone-extra-cta request-trigger" data-request="USTA ULTRA DETAILING">Забронировать →</a></div></div>
     </div>
   </div>
 </section>
 
-<section id="zones" class="section-pad reveal">
+<section id="zones" class="section-pad reveal" style="padding-bottom:0;">
   <div class="wrap">
-    <div class="eyebrow-row">
-      <span class="eyebrow">Пока вы ждёте</span>
-      <h2 class="section-title">Ожидание — <em>тоже часть сервиса</em></h2>
-    </div>
-
-    <div class="zone-row service-visual-row">
-      <div class="service-visual" id="visual-vitrina" aria-hidden="true">
-        <img src="https://images.unsplash.com/photo-1658052855902-0e3428bd89fc?w=500&h=400&fit=crop&auto=format&q=80" alt="" loading="lazy">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Пока вы ждёте</span>
+        <div class="display" style="margin-top:14px;">Зоны</div>
       </div>
+      <div class="section-index">02 / Ожидание — тоже часть сервиса</div>
+    </div>
+  </div>
+
+  <div class="wrap" style="padding:0;">
+    <div class="zone-row service-visual-row">
+      <div class="service-visual" id="visual-vitrina"><img src="https://images.unsplash.com/photo-1658052855902-0e3428bd89fc?w=700&h=600&fit=crop&auto=format&q=80" alt="" loading="lazy"></div>
       <div class="service-content">
-        <div class="zone-code mono">BAY 02 · VITRINA</div>
+        <div class="zone-code">Bay 02 · Vitrina</div>
         <div class="zone-name">Шоурум</div>
         <div class="zone-desc">Витринная площадка для новых и премиальных автомобилей — лицо комплекса со стороны фасада.</div>
+        <div class="zone-toggle">+</div>
+        <div class="zone-extra"><div class="zone-extra-inner">Экспозиция обновляется ежемесячно. Можно оставить свой автомобиль на реализацию через партнёров M².<br><a href="#" class="link-arrow zone-extra-cta detail-trigger" data-detail="vitrina" style="margin-right:20px;">Подробнее →</a><a href="#" class="link-arrow zone-extra-cta request-trigger" data-request="VITRINA — шоурум">Узнать больше →</a></div></div>
       </div>
-      <div class="zone-toggle">+</div>
-      <div class="zone-extra"><div class="zone-extra-inner">Экспозиция обновляется ежемесячно. Можно оставить свой автомобиль на реализацию через партнёров M².<br><button type="button" class="btn-line zone-extra-cta detail-trigger" data-detail="vitrina">Подробнее →</button> <button type="button" class="btn-line zone-extra-cta request-trigger" data-request="VITRINA — шоурум">Узнать больше →</button></div></div>
     </div>
 
     <div class="zone-row service-visual-row reverse">
-      <div class="service-visual" id="visual-ostrie" aria-hidden="true">
-        <img src="https://images.unsplash.com/photo-1759134248487-e8baaf31e33e?w=500&h=400&fit=crop&auto=format&q=80" alt="" loading="lazy">
-      </div>
+      <div class="service-visual" id="visual-ostrie"><img src="https://images.unsplash.com/photo-1759134248487-e8baaf31e33e?w=700&h=600&fit=crop&auto=format&q=80" alt="" loading="lazy"></div>
       <div class="service-content">
-        <div class="zone-code mono">BAY 03A · OSTRIE</div>
+        <div class="zone-code">Bay 03A · Ostrie</div>
         <div class="zone-name">Барбершоп</div>
         <div class="zone-desc">Мужская зона: стрижка, борода, уход — пока машина проходит детейлинг.</div>
+        <div class="zone-toggle">+</div>
+        <div class="zone-extra"><div class="zone-extra-inner">Стрижка, оформление бороды, королевское бритьё. Запись синхронизирована с детейлингом — обычно 25 минут, ровно на время мойки.<br><a href="#" class="link-arrow zone-extra-cta detail-trigger" data-detail="ostrie" style="margin-right:20px;">Подробнее →</a><a href="#" class="link-arrow zone-extra-cta request-trigger" data-request="OSTRIE — барбершоп">Записаться →</a></div></div>
       </div>
-      <div class="zone-toggle">+</div>
-      <div class="zone-extra"><div class="zone-extra-inner">Стрижка, оформление бороды, королевское бритьё. Запись синхронизирована с детейлингом — обычно 25 минут, ровно на время мойки.<br><button type="button" class="btn-line zone-extra-cta detail-trigger" data-detail="ostrie">Подробнее →</button> <button type="button" class="btn-line zone-extra-cta request-trigger" data-request="OSTRIE — барбершоп">Записаться →</button></div></div>
     </div>
 
     <div class="zone-row service-visual-row">
-      <div class="service-visual" id="visual-siluet" aria-hidden="true">
-        <img src="https://images.unsplash.com/photo-1781450090585-1a511b7066d9?w=500&h=400&fit=crop&auto=format&q=80" alt="" loading="lazy">
-      </div>
+      <div class="service-visual" id="visual-siluet"><img src="https://images.unsplash.com/photo-1781450090585-1a511b7066d9?w=700&h=600&fit=crop&auto=format&q=80" alt="" loading="lazy"></div>
       <div class="service-content">
-        <div class="zone-code mono">BAY 03B · SILUET</div>
+        <div class="zone-code">Bay 03B · Siluet</div>
         <div class="zone-name">Салон красоты</div>
         <div class="zone-desc">Отдельное крыло для женской аудитории: причёски, маникюр, косметология.</div>
+        <div class="zone-toggle">+</div>
+        <div class="zone-extra"><div class="zone-extra-inner">Причёска, маникюр, экспресс-уход за лицом. Отдельный вход и зона ожидания — вне потока основного комплекса.<br><a href="#" class="link-arrow zone-extra-cta detail-trigger" data-detail="siluet" style="margin-right:20px;">Подробнее →</a><a href="#" class="link-arrow zone-extra-cta request-trigger" data-request="SILUET — салон красоты">Записаться →</a></div></div>
       </div>
-      <div class="zone-toggle">+</div>
-      <div class="zone-extra"><div class="zone-extra-inner">Причёска, маникюр, экспресс-уход за лицом. Отдельный вход и зона ожидания — вне потока основного комплекса.<br><button type="button" class="btn-line zone-extra-cta detail-trigger" data-detail="siluet">Подробнее →</button> <button type="button" class="btn-line zone-extra-cta request-trigger" data-request="SILUET — салон красоты">Записаться →</button></div></div>
     </div>
 
     <div class="zone-row service-visual-row reverse">
-      <div class="service-visual" id="visual-arena" aria-hidden="true">
-        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500&h=400&fit=crop&auto=format&q=80" alt="" loading="lazy">
-      </div>
+      <div class="service-visual" id="visual-arena"><img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=700&h=600&fit=crop&auto=format&q=80" alt="" loading="lazy"></div>
       <div class="service-content">
-        <div class="zone-code mono">BAY 04 · ARENA</div>
+        <div class="zone-code">Bay 04 · Arena</div>
         <div class="zone-name">Игровая зона</div>
         <div class="zone-desc">Приставки и настольные игры для детей, пока родители заняты своими делами.</div>
+        <div class="zone-toggle">+</div>
+        <div class="zone-extra"><div class="zone-extra-inner">Игровые приставки нового поколения и настольные игры. Присмотр для детей от 5 лет на время визита родителей.<br><a href="#" class="link-arrow zone-extra-cta detail-trigger" data-detail="arena" style="margin-right:20px;">Подробнее →</a><a href="#" class="link-arrow zone-extra-cta request-trigger" data-request="ARENA — игровая зона">Узнать больше →</a></div></div>
       </div>
-      <div class="zone-toggle">+</div>
-      <div class="zone-extra"><div class="zone-extra-inner">Игровые приставки нового поколения и настольные игры. Присмотр для детей от 5 лет на время визита родителей.<br><button type="button" class="btn-line zone-extra-cta detail-trigger" data-detail="arena">Подробнее →</button> <button type="button" class="btn-line zone-extra-cta request-trigger" data-request="ARENA — игровая зона">Узнать больше →</button></div></div>
     </div>
 
     <div class="zone-row service-visual-row">
-      <div class="service-visual" id="visual-markiz" aria-hidden="true">
-        <img src="https://images.unsplash.com/photo-1753727471014-efe38840c7c7?w=500&h=400&fit=crop&auto=format&q=80" alt="" loading="lazy">
-      </div>
+      <div class="service-visual" id="visual-markiz"><img src="https://images.unsplash.com/photo-1753727471014-efe38840c7c7?w=700&h=600&fit=crop&auto=format&q=80" alt="" loading="lazy"></div>
       <div class="service-content">
-        <div class="zone-code mono">BAY 05 · MARQUEZ</div>
+        <div class="zone-code">Bay 05 · Marquez</div>
         <div class="zone-name">Ресторан</div>
         <div class="zone-desc">От быстрого обеда до полноценной встречи за столом — кухня для тех, кто заехал на час.</div>
+        <div class="zone-toggle">+</div>
+        <div class="zone-extra"><div class="zone-extra-inner">Локальная и паназиатская кухня. Стол можно забронировать отдельно, даже без визита на мойку.<br><a href="#" class="link-arrow zone-extra-cta detail-trigger" data-detail="marquez" style="margin-right:20px;">Подробнее →</a><a href="#" class="link-arrow zone-extra-cta request-trigger" data-request="MARQUEZ — ресторан">Забронировать стол →</a></div></div>
       </div>
-      <div class="zone-toggle">+</div>
-      <div class="zone-extra"><div class="zone-extra-inner">Локальная и паназиатская кухня. Стол можно забронировать отдельно, даже без визита на мойку.<br><button type="button" class="btn-line zone-extra-cta detail-trigger" data-detail="marquez">Подробнее →</button> <button type="button" class="btn-line zone-extra-cta request-trigger" data-request="MARQUEZ — ресторан">Забронировать стол →</button></div></div>
     </div>
   </div>
 </section>
 
-<section id="reveal" class="membership reveal" style="border-bottom:1px solid var(--line-soft);">
+<section id="reveal" class="rust-panel">
   <div class="podium-spotlight" id="podiumSpotlight"></div>
-  <div class="wrap membership-inner">
-    <span class="eyebrow" style="margin-bottom:20px;">Отличие M²</span>
-    <h2>Финал — это <em>подиум</em></h2>
+  <div class="wrap rust-inner">
+    <span class="eyebrow" style="color:var(--ink-55);">Отличие M²</span>
+    <div class="display">Финал — это подиум</div>
     <p>После детейлинга USTA автомобиль выезжает не к выходу, а на освещённый подиум шоурума — как на презентации нового авто. Фото готового результата отправляется вам в момент, когда вы ещё сидите у барбера или за столом в ресторане.</p>
   </div>
 </section>
 
 <section id="journey" class="section-pad reveal">
   <div class="wrap">
-    <div class="eyebrow-row">
-      <span class="eyebrow">Маршрут гостя</span>
-      <h2 class="section-title">Один визит <em>закрывает три дела</em></h2>
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Маршрут гостя</span>
+        <div class="display" style="margin-top:14px;">Маршрут</div>
+      </div>
+      <div class="section-index">03 / Один визит закрывает три дела</div>
     </div>
     <div class="journey-grid">
       <div class="jstep">
@@ -721,56 +457,62 @@
 
 <section id="partners" class="section-pad reveal">
   <div class="wrap">
-    <div class="eyebrow-row">
-      <span class="eyebrow">Экосистема M²</span>
-      <h2 class="section-title">Не просто мойка. <em>Ещё и финансовый статус</em></h2>
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Экосистема M²</span>
+        <div class="display" style="margin-top:14px;">Партнёры</div>
+      </div>
+      <div class="section-index">04 / Не просто мойка</div>
     </div>
-    <p style="max-width:560px;color:var(--stone);font-size:15px;line-height:1.7;margin-bottom:56px;margin-top:-30px;">Гарантии M² подкреплены не только словом мастера. За ценой и обещанием стоят реальные партнёры — банк и страховая компания.</p>
+    <p class="section-intro" style="margin-top:-30px;margin-bottom:44px;">Гарантии M² подкреплены не только словом мастера. За ценой и обещанием стоят реальные партнёры — банк и страховая компания.</p>
 
     <div class="zone-row">
       <div class="zone-ghost">01</div>
-      <div><div class="zone-code mono">PARTNER · APEX BANK</div><div class="zone-name">Карта M² Black</div></div>
+      <div><div class="zone-code">Partner · Apex Bank</div><div class="zone-name">Карта M² Black</div></div>
       <div class="zone-desc">Со-брендированная карта — одновременно членский пропуск и платёжная карта Apex Bank. Кэшбэк на каждый визит, рассрочка 0% на Ultra Detailing.</div>
       <div class="zone-toggle">+</div>
-      <div class="zone-extra"><div class="zone-extra-inner">Оформляется на месте при вступлении в Black Card или Founders Club. Через приложение Apex Bank — бронь слота, история визитов, рассрочка на керамику и крупные пакеты. Условия и лимиты — по тарифам банка.<br><button type="button" class="btn-line zone-extra-cta request-trigger" data-request="Карта M² Black">Оформить карту →</button></div></div>
+      <div class="zone-extra"><div class="zone-extra-inner">Оформляется на месте при вступлении в Black Card или Founders Club. Через приложение Apex Bank — бронь слота, история визитов, рассрочка на керамику и крупные пакеты. Условия и лимиты — по тарифам банка.<br><a href="#" class="link-arrow zone-extra-cta request-trigger" data-request="Карта M² Black">Оформить карту →</a></div></div>
     </div>
     <div class="zone-row">
       <div class="zone-ghost">02</div>
-      <div><div class="zone-code mono">PARTNER · INSURANCE</div><div class="zone-name">Застрахованный результат</div></div>
+      <div><div class="zone-code">Partner · Insurance</div><div class="zone-name">Застрахованный результат</div></div>
       <div class="zone-desc">Гарантия на Ultra Detailing — это полис, а не устное обещание. Автомобиль застрахован на всё время нахождения на территории M².</div>
       <div class="zone-toggle">+</div>
-      <div class="zone-extra"><div class="zone-extra-inner">Полис на результат оформляется автоматически при заказе Ultra Detailing и включён в стоимость услуги. Отдельное покрытие — на случай повреждения автомобиля во время визита, независимо от выбранного тарифа мойки.<br><button type="button" class="btn-line zone-extra-cta request-trigger" data-request="USTA ULTRA DETAILING">Записаться на Ultra Detailing →</button></div></div>
+      <div class="zone-extra"><div class="zone-extra-inner">Полис на результат оформляется автоматически при заказе Ultra Detailing и включён в стоимость услуги. Отдельное покрытие — на случай повреждения автомобиля во время визита, независимо от выбранного тарифа мойки.<br><a href="#" class="link-arrow zone-extra-cta request-trigger" data-request="USTA ULTRA DETAILING">Записаться на Ultra Detailing →</a></div></div>
     </div>
   </div>
 </section>
 
 <section id="membership" class="section-pad reveal">
   <div class="wrap">
-    <div class="eyebrow-row">
-      <span class="eyebrow">Членство</span>
-      <h2 class="section-title">Статус, который <em>виден с первого визита</em></h2>
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Членство</span>
+        <div class="display" style="margin-top:14px;">Членство</div>
+      </div>
+      <div class="section-index">05 / Статус, который виден с первого визита</div>
     </div>
 
     <div class="zone-row">
       <div class="zone-ghost">A</div>
-      <div><div class="zone-code mono">SIGNATURE</div><div class="zone-name">Постоянный гость</div></div>
+      <div><div class="zone-code">Signature</div><div class="zone-name">Постоянный гость</div></div>
       <div class="zone-desc">Фиксированное число моек и детейлинг-услуг в месяц, приоритетная запись у именного мастера.</div>
       <div class="zone-toggle">+</div>
-      <div class="zone-extra"><div class="zone-extra-inner">Цена абонемента фиксируется на 12 месяцев вне зависимости от роста тарифов комплекса.<br><button type="button" class="btn-line zone-extra-cta request-trigger" data-request="Членство Signature">Оформить Signature →</button></div></div>
+      <div class="zone-extra"><div class="zone-extra-inner">Цена абонемента фиксируется на 12 месяцев вне зависимости от роста тарифов комплекса.<br><a href="#" class="link-arrow zone-extra-cta request-trigger" data-request="Членство Signature">Оформить Signature →</a></div></div>
     </div>
     <div class="zone-row">
       <div class="zone-ghost">B</div>
-      <div><div class="zone-code mono">BLACK CARD</div><div class="zone-name">Приоритетный гость</div></div>
+      <div><div class="zone-code">Black Card</div><div class="zone-name">Приоритетный гость</div></div>
       <div class="zone-desc">Всё из Signature плюс подиум-финал на каждый визит, стол в ресторане без ожидания, запись в барбершоп и салон вне очереди. Выдаётся как карта Apex Bank.</div>
       <div class="zone-toggle">+</div>
-      <div class="zone-extra"><div class="zone-extra-inner">Включает 2 гостевых визита в год — можно передать статус другу или члену семьи. Карта одновременно работает как обычная платёжная карта Apex Bank с кэшбэком на визиты M².<br><button type="button" class="btn-line zone-extra-cta request-trigger" data-request="Карта M² Black">Оформить Black Card →</button></div></div>
+      <div class="zone-extra"><div class="zone-extra-inner">Включает 2 гостевых визита в год — можно передать статус другу или члену семьи. Карта одновременно работает как обычная платёжная карта Apex Bank с кэшбэком на визиты M².<br><a href="#" class="link-arrow zone-extra-cta request-trigger" data-request="Карта M² Black">Оформить Black Card →</a></div></div>
     </div>
     <div class="zone-row">
       <div class="zone-ghost">C</div>
-      <div><div class="zone-code mono">FOUNDERS CLUB</div><div class="zone-name">Первые 100</div></div>
+      <div><div class="zone-code">Founders Club</div><div class="zone-name">Первые 100</div></div>
       <div class="zone-desc">Закрытый статус для первых гостей M²: персональный бокс, фиксированная цена на все годы членства.</div>
       <div class="zone-toggle">+</div>
-      <div class="zone-extra"><div class="zone-extra-inner">Доступно только до официального открытия комплекса. Место закрепляется депозитом.<br><button type="button" class="btn-line zone-extra-cta request-trigger" data-request="Founders Club">Оставить заявку →</button></div></div>
+      <div class="zone-extra"><div class="zone-extra-inner">Доступно только до официального открытия комплекса. Место закрепляется депозитом.<br><a href="#" class="link-arrow zone-extra-cta request-trigger" data-request="Founders Club">Оставить заявку →</a></div></div>
     </div>
   </div>
 </section>
@@ -779,11 +521,9 @@
   <div class="wrap">
     <div class="footer-top">
       <div>
-        <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
-          <div class="monogram-seal" aria-hidden="true"><span class="m">M</span><span class="sq">2</span></div>
-        </div>
+        <div class="seal"><span>M</span><sup>2</sup></div>
         <p style="max-width:300px;">Автомобильный дом на Мирабад сквере: мойка, детейлинг, шоурум, барбершоп, салон красоты, игровая зона и ресторан.</p>
-        <button type="button" class="btn-line request-trigger" data-request="" style="margin-top:22px;">Оставить заявку →</button>
+        <a href="#" class="link-arrow request-trigger" data-request="" style="margin-top:22px;">Оставить заявку →</a>
       </div>
       <div>
         <h4>Контакты</h4>
@@ -799,26 +539,26 @@
     </div>
     <div class="footer-bottom">
       <span>© 2026 M²</span>
-      <span class="mono">CONCEPT V3 · MIRABAD SKVER</span>
+      <span>CONCEPT V3 · MIRABAD SKVER</span>
     </div>
   </div>
 </footer>
 
-<div class="cabinet-overlay" id="cabinetOverlay">
+<div class="overlay-scrim" id="cabinetOverlay">
   <div class="cabinet-panel" role="dialog" aria-modal="true" aria-labelledby="cabinetTitle">
     <div class="cabinet-head">
-      <span id="cabinetTitle" class="serif" style="font-size:21px;">Личный кабинет</span>
-      <button class="cabinet-close" id="cabinetClose" aria-label="Закрыть кабинет">×</button>
+      <span id="cabinetTitle">Личный кабинет</span>
+      <button class="overlay-close" id="cabinetClose" aria-label="Закрыть кабинет">×</button>
     </div>
 
     <div id="cabinetGuest">
       <p class="cabinet-note">Демо-доступ к кабинету M² — проверьте, как работают бонусы и промокоды.</p>
-      <form id="cabinetLoginForm" class="cabinet-form">
-        <label class="cabinet-label" for="cabinetName">Имя</label>
-        <input type="text" id="cabinetName" class="cabinet-input" placeholder="Ваше имя" required>
-        <label class="cabinet-label" for="cabinetPhone">Телефон</label>
-        <input type="tel" id="cabinetPhone" class="cabinet-input" placeholder="+998 XX XXX XX XX" required>
-        <button type="submit" class="btn-solid" style="margin-top:26px;width:100%;">Войти</button>
+      <form id="cabinetLoginForm">
+        <div class="field-label">Имя</div>
+        <input type="text" id="cabinetName" class="field-input" placeholder="Ваше имя" required>
+        <div class="field-label">Телефон</div>
+        <input type="tel" id="cabinetPhone" class="field-input" placeholder="+998 XX XXX XX XX" required>
+        <button type="submit" class="btn-ink" style="margin-top:26px;width:100%;">Войти</button>
       </form>
     </div>
 
@@ -828,116 +568,99 @@
 
       <div class="cabinet-stat-row">
         <div>
-          <div class="cabinet-stat-num serif" id="cabinetBonus">0</div>
+          <div class="cabinet-stat-num" id="cabinetBonus">0</div>
           <div class="cabinet-stat-label">бонусов</div>
         </div>
         <div>
-          <div class="cabinet-stat-num serif" id="cabinetTier" style="font-size:18px;">Нет уровня</div>
+          <div class="cabinet-stat-num" id="cabinetTier" style="font-size:17px;">Нет уровня</div>
           <div class="cabinet-stat-label">членство</div>
         </div>
       </div>
 
       <div class="cabinet-promo">
-        <label class="cabinet-label" for="cabinetPromoInput">Промокод</label>
+        <div class="field-label">Промокод</div>
         <div class="cabinet-promo-row">
-          <input type="text" id="cabinetPromoInput" class="cabinet-input" placeholder="Введите код">
-          <button id="cabinetPromoBtn" class="btn-line" type="button">Применить</button>
+          <input type="text" id="cabinetPromoInput" class="field-input" placeholder="Введите код">
+          <button id="cabinetPromoBtn" class="btn-ghost" type="button">Применить</button>
         </div>
         <p class="cabinet-promo-msg" id="cabinetPromoMsg"></p>
       </div>
 
       <div class="cabinet-history">
-        <div class="cabinet-label" style="margin-top:0;">История начислений</div>
+        <div class="field-label" style="margin-top:0;">История начислений</div>
         <ul class="cabinet-history-list" id="cabinetHistoryList">
           <li class="cabinet-empty">Пока пусто — примените промокод</li>
         </ul>
       </div>
 
-      <button id="cabinetLogout" class="btn-line" style="margin-top:34px;" type="button">Выйти</button>
+      <button id="cabinetLogout" class="btn-ghost" style="margin-top:32px;" type="button">Выйти</button>
     </div>
   </div>
 </div>
 
-<div class="mobile-menu-overlay" id="mobileMenuOverlay">
-  <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Закрыть меню">×</button>
-  <nav class="mobile-menu-links">
-    <a href="#pricing" class="mobile-menu-link">Тарифы</a>
-    <a href="#reveal" class="mobile-menu-link">Подиум</a>
-    <a href="#partners" class="mobile-menu-link">Партнёры</a>
-    <a href="#membership" class="mobile-menu-link">Членство</a>
-  </nav>
-  <div class="mobile-menu-actions">
-    <button type="button" class="mobile-menu-action" id="mobileStatusTrigger">Загрузка сейчас</button>
-    <button type="button" class="mobile-menu-action" id="mobileCabinetTrigger">Кабинет</button>
-    <a href="#contacts" class="mobile-menu-action">Контакты</a>
-    <a href="../index.html" class="mobile-menu-action" style="color:var(--bronze-soft);">← Вернуться в Apex Service</a>
-  </div>
-</div>
-
-<div class="detail-overlay" id="detailOverlay">
-  <div class="detail-modal">
-    <button class="detail-close" id="detailClose" aria-label="Закрыть">×</button>
+<div class="overlay-scrim" id="detailOverlay" style="display:flex;align-items:center;justify-content:center;padding:24px;">
+  <div class="modal-center wide">
+    <button class="overlay-close" id="detailClose" aria-label="Закрыть" style="position:absolute;top:16px;right:16px;z-index:2;">×</button>
     <div class="detail-photo"><img id="detailPhotoImg" src="" alt="" loading="lazy"></div>
     <div class="detail-body">
-      <div class="detail-code mono" id="detailCode"></div>
+      <div class="detail-code" id="detailCode"></div>
       <div class="detail-title" id="detailTitle"></div>
       <p class="detail-intro" id="detailIntro"></p>
       <div class="detail-list" id="detailList"></div>
-      <button type="button" class="btn-solid" id="detailBookBtn" style="width:100%;">Записаться</button>
+      <button type="button" class="btn-ink" id="detailBookBtn" style="width:100%;">Записаться</button>
     </div>
   </div>
 </div>
 
-<div class="request-overlay" id="requestOverlay">
-  <div class="request-modal" role="dialog" aria-modal="true" aria-labelledby="requestTitle">
-    <button class="cabinet-close request-close" id="requestClose" aria-label="Закрыть заявку">×</button>
+<div class="overlay-scrim" id="requestOverlay" style="display:flex;align-items:center;justify-content:center;padding:24px;">
+  <div class="modal-center" role="dialog" aria-modal="true" aria-labelledby="requestTitle">
 
     <div id="requestStep1">
       <div class="eyebrow" style="margin-bottom:14px;">Заявка · Шаг 1 из 2</div>
-      <h3 id="requestTitle" class="serif" style="font-size:24px;margin-bottom:26px;">Что вас интересует?</h3>
+      <h3 id="requestTitle" style="font-family:var(--font-display);font-weight:500;font-size:23px;margin-bottom:26px;">Что вас интересует?</h3>
       <div class="interest-grid">
         <button class="interest-chip" data-value="USTA — мойка и детейлинг" type="button">USTA — мойка и детейлинг</button>
         <button class="interest-chip" data-value="Карта M² Black" type="button">Карта M² Black</button>
         <button class="interest-chip" data-value="Founders Club" type="button">Founders Club</button>
         <button class="interest-chip" data-value="Другое" type="button">Другое</button>
       </div>
-      <button class="btn-solid" id="requestNext" style="margin-top:32px;width:100%;" type="button" disabled>Далее</button>
+      <button class="btn-ink" id="requestNext" style="margin-top:30px;width:100%;" type="button" disabled>Далее</button>
     </div>
 
     <div id="requestStep2" style="display:none;">
       <div class="eyebrow" style="margin-bottom:14px;">Заявка · Шаг 2 из 2</div>
       <div id="requestVisual" class="request-visual"></div>
-      <h3 class="serif" style="font-size:24px;margin-bottom:6px;">Ваши контакты</h3>
-      <p class="cabinet-sub" id="requestSelectedLabel" style="margin-bottom:26px;"></p>
-      <form id="requestForm" class="cabinet-form">
-        <label class="cabinet-label" for="requestName">Имя</label>
-        <input type="text" id="requestName" class="cabinet-input" placeholder="Ваше имя" required>
-        <label class="cabinet-label" for="requestPhone">Телефон</label>
-        <input type="tel" id="requestPhone" class="cabinet-input" placeholder="+998 XX XXX XX XX" required>
-        <label class="cabinet-label" for="requestComment">Комментарий (необязательно)</label>
-        <textarea id="requestComment" class="cabinet-input" style="resize:vertical;min-height:60px;font-family:inherit;" placeholder="Например, модель авто или удобное время"></textarea>
+      <h3 style="font-family:var(--font-display);font-weight:500;font-size:23px;margin-bottom:6px;">Ваши контакты</h3>
+      <p class="cabinet-sub" id="requestSelectedLabel" style="margin-bottom:24px;"></p>
+      <form id="requestForm">
+        <div class="field-label">Имя</div>
+        <input type="text" id="requestName" class="field-input" placeholder="Ваше имя" required>
+        <div class="field-label">Телефон</div>
+        <input type="tel" id="requestPhone" class="field-input" placeholder="+998 XX XXX XX XX" required>
+        <div class="field-label">Комментарий (необязательно)</div>
+        <textarea id="requestComment" class="field-input" style="resize:vertical;min-height:56px;font-family:inherit;" placeholder="Например, модель авто или удобное время"></textarea>
         <div style="display:flex;gap:14px;margin-top:26px;">
-          <button type="button" id="requestBack" class="btn-line" style="flex:0 0 auto;">Назад</button>
-          <button type="submit" class="btn-solid" style="flex:1;">Отправить заявку</button>
+          <button type="button" id="requestBack" class="btn-ghost" style="flex:0 0 auto;">Назад</button>
+          <button type="submit" class="btn-ink" style="flex:1;">Отправить заявку</button>
         </div>
       </form>
     </div>
 
     <div id="requestStep3" style="display:none;text-align:center;">
       <div class="eyebrow" style="margin-bottom:18px;">Заявка отправлена</div>
-      <div class="serif mono" style="font-size:15px;color:var(--bronze-soft);margin-bottom:16px;letter-spacing:0.04em;" id="requestNumber">M2-000000</div>
-      <h3 class="serif" style="font-size:26px;line-height:1.25;margin-bottom:16px;">Мы свяжемся с вами<br>в течение 15 минут</h3>
+      <div style="font-family:var(--font-display);font-size:15px;color:var(--ink-55);margin-bottom:16px;letter-spacing:0.04em;" id="requestNumber">M2-000000</div>
+      <h3 style="font-family:var(--font-display);font-weight:500;font-size:25px;line-height:1.3;margin-bottom:16px;">Мы свяжемся с вами<br>в течение 15 минут</h3>
       <p class="cabinet-note" id="requestSummary" style="margin-bottom:0;"></p>
-      <button class="btn-line" id="requestClose2" style="margin-top:30px;" type="button">Закрыть</button>
+      <button class="btn-ghost" id="requestClose2" style="margin-top:28px;" type="button">Закрыть</button>
     </div>
   </div>
 </div>
 
-<div class="status-overlay" id="statusOverlay">
-  <div class="status-modal" role="dialog" aria-modal="true" aria-labelledby="statusTitle">
-    <button class="cabinet-close" id="statusClose" aria-label="Закрыть">×</button>
-    <div class="eyebrow" style="margin-bottom:14px;"><span class="status-live-dot"></span>USTA · Мойка и детейлинг</div>
-    <h3 id="statusTitle" class="serif" style="font-size:23px;margin-bottom:4px;">Загрузка сейчас</h3>
+<div class="overlay-scrim" id="statusOverlay" style="display:flex;align-items:center;justify-content:center;padding:24px;">
+  <div class="modal-center" role="dialog" aria-modal="true" aria-labelledby="statusTitle">
+    <button class="overlay-close" id="statusClose" aria-label="Закрыть" style="position:absolute;top:16px;right:16px;">×</button>
+    <div class="eyebrow" style="margin-bottom:14px;"><span class="live-dot" style="margin-right:6px;"></span>USTA · Мойка и детейлинг</div>
+    <h3 id="statusTitle" style="font-family:var(--font-display);font-weight:500;font-size:22px;margin-bottom:4px;">Загрузка сейчас</h3>
     <p class="status-note" style="margin-top:10px;">Онлайн-статус постов мойки в реальном времени.</p>
 
     <div class="status-stat-row">
@@ -957,7 +680,7 @@
 
     <div class="bays-grid" id="baysGrid"></div>
 
-    <button type="button" class="btn-solid" id="statusBookBtn" style="width:100%;">Забронировать ближайший слот</button>
+    <button type="button" class="btn-ink" id="statusBookBtn" style="width:100%;">Забронировать ближайший слот</button>
   </div>
 </div>
 
@@ -969,15 +692,6 @@
     });
   }, {threshold:0.12});
   revealEls.forEach(el=>io.observe(el));
-
-  // День/ночь
-  const modeToggle = document.getElementById('modeToggle');
-  const modeIcon = document.getElementById('modeIcon');
-  modeToggle.addEventListener('click', ()=>{
-    const isDay = document.body.classList.toggle('day');
-    modeIcon.textContent = isDay ? '☾' : '☀';
-    modeToggle.setAttribute('aria-pressed', isDay);
-  });
 
   // Раскрывающиеся разделы
   document.querySelectorAll('.zone-row').forEach(row=>{
@@ -1076,7 +790,6 @@
 
   // Заявка — умный wizard: если интерес уже известен (карта/членство), сразу к контактам
   const requestOverlay = document.getElementById('requestOverlay');
-  const requestClose = document.getElementById('requestClose');
   const requestClose2 = document.getElementById('requestClose2');
   const requestStep1 = document.getElementById('requestStep1');
   const requestStep2 = document.getElementById('requestStep2');
@@ -1167,7 +880,6 @@
     showStep(3);
   });
 
-  requestClose.addEventListener('click', closeRequest);
   requestClose2.addEventListener('click', closeRequest);
   requestOverlay.addEventListener('click', (e)=>{ if(e.target === requestOverlay) closeRequest(); });
   document.addEventListener('keydown', (e)=>{
@@ -1178,6 +890,7 @@
   // Все триггеры заявки — hero, футер, кнопки внутри разделов
   document.querySelectorAll('.request-trigger').forEach(btn=>{
     btn.addEventListener('click', (e)=>{
+      e.preventDefault();
       e.stopPropagation();
       openRequest(btn.dataset.request || null);
     });
@@ -1241,45 +954,6 @@
     if(statusOverlay.classList.contains('open')) closeStatus();
   });
 
-  // Мобильное меню
-  const burgerToggle = document.getElementById('burgerToggle');
-  const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
-  const mobileMenuClose = document.getElementById('mobileMenuClose');
-  const mobileStatusTrigger = document.getElementById('mobileStatusTrigger');
-  const mobileCabinetTrigger = document.getElementById('mobileCabinetTrigger');
-
-  function openMobileMenu(){
-    mobileMenuOverlay.classList.add('open');
-    burgerToggle.textContent = '×';
-    burgerToggle.setAttribute('aria-expanded', 'true');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeMobileMenu(){
-    mobileMenuOverlay.classList.remove('open');
-    burgerToggle.textContent = '☰';
-    burgerToggle.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
-  }
-  burgerToggle.addEventListener('click', ()=>{
-    if(mobileMenuOverlay.classList.contains('open')) closeMobileMenu();
-    else openMobileMenu();
-  });
-  mobileMenuClose.addEventListener('click', closeMobileMenu);
-  document.querySelectorAll('.mobile-menu-link, .mobile-menu-actions a').forEach(link=>{
-    link.addEventListener('click', closeMobileMenu);
-  });
-  mobileStatusTrigger.addEventListener('click', ()=>{
-    closeMobileMenu();
-    openStatus();
-  });
-  mobileCabinetTrigger.addEventListener('click', ()=>{
-    closeMobileMenu();
-    openCabinet();
-  });
-  document.addEventListener('keydown', (e)=>{
-    if(e.key === 'Escape' && mobileMenuOverlay.classList.contains('open')) closeMobileMenu();
-  });
-
   // Прогресс-бар скролла
   const scrollProgress = document.getElementById('scrollProgress');
   function updateScrollProgress(){
@@ -1313,13 +987,17 @@
   }, { threshold: 0.5 });
   countEls.forEach(el=>countIO.observe(el));
 
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    countEls.forEach(el=>{ el.textContent = parseInt(el.dataset.count,10).toLocaleString('ru-RU'); });
+  }
+
   // Магнитные кнопки — тянутся к курсору в небольшом радиусе
-  document.querySelectorAll('.btn-solid, .btn-line').forEach(btn=>{
+  document.querySelectorAll('.btn-ink, .btn-ghost').forEach(btn=>{
     let raf = null;
     btn.addEventListener('mousemove', (e)=>{
       const rect = btn.getBoundingClientRect();
-      const dx = (e.clientX - (rect.left + rect.width/2)) * 0.25;
-      const dy = (e.clientY - (rect.top + rect.height/2)) * 0.35;
+      const dx = (e.clientX - (rect.left + rect.width/2)) * 0.2;
+      const dy = (e.clientY - (rect.top + rect.height/2)) * 0.28;
       if(raf) cancelAnimationFrame(raf);
       raf = requestAnimationFrame(()=>{
         btn.style.transform = `translate(${dx}px, ${dy}px)`;
@@ -1344,16 +1022,11 @@
     podiumSection.addEventListener('mouseleave', ()=> podiumSection.classList.remove('spotlight-active'));
   }
 
-  // Уважаем настройку "меньше анимаций"
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-    countEls.forEach(el=>{ el.textContent = parseInt(el.dataset.count,10).toLocaleString('ru-RU'); });
-  }
-
   // Детальные окна услуг — «что внутри»
   const SERVICE_DETAILS = {
     vitrina: {
       code: 'BAY 02 · VITRINA', title: 'Шоурум', request: 'VITRINA — шоурум',
-      photo: 'https://images.unsplash.com/photo-1658052855902-0e3428bd89fc?w=700&h=500&fit=crop&auto=format&q=80',
+      photo: 'https://images.unsplash.com/photo-1658052855902-0e3428bd89fc?w=900&h=600&fit=crop&auto=format&q=80',
       intro: 'Витринная площадка премиальных и новых автомобилей — лицо комплекса со стороны фасада. Экспозиция ротируется, чтобы гостям было интересно заходить снова.',
       items: [
         ['Ротация экспозиции', 'Ежемесячно'],
@@ -1364,7 +1037,7 @@
     },
     ostrie: {
       code: 'BAY 03A · OSTRIE', title: 'Барбершоп', request: 'OSTRIE — барбершоп',
-      photo: 'https://images.unsplash.com/photo-1759134248487-e8baaf31e33e?w=700&h=500&fit=crop&auto=format&q=80',
+      photo: 'https://images.unsplash.com/photo-1759134248487-e8baaf31e33e?w=900&h=600&fit=crop&auto=format&q=80',
       intro: 'Мужская зона: стрижка, борода, уход — синхронизировано с детейлингом, чтобы гость не ждал ни машину, ни своей очереди.',
       items: [
         ['Стрижка машинкой', 'от 60 000 сум'],
@@ -1376,7 +1049,7 @@
     },
     siluet: {
       code: 'BAY 03B · SILUET', title: 'Салон красоты', request: 'SILUET — салон красоты',
-      photo: 'https://images.unsplash.com/photo-1781450090585-1a511b7066d9?w=700&h=500&fit=crop&auto=format&q=80',
+      photo: 'https://images.unsplash.com/photo-1781450090585-1a511b7066d9?w=900&h=600&fit=crop&auto=format&q=80',
       intro: 'Отдельное крыло для женской аудитории — свой вход, своя зона ожидания, вне общего потока комплекса.',
       items: [
         ['Женская стрижка', 'от 100 000 сум'],
@@ -1389,7 +1062,7 @@
     },
     arena: {
       code: 'BAY 04 · ARENA', title: 'Игровая зона', request: 'ARENA — игровая зона',
-      photo: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=700&h=500&fit=crop&auto=format&q=80',
+      photo: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=900&h=600&fit=crop&auto=format&q=80',
       intro: 'Присмотр для детей от 5 лет, пока родители заняты своими делами — мойкой, барбершопом или салоном красоты.',
       items: [
         ['Приставки нового поколения', 'PS5, до 4 игроков'],
@@ -1400,7 +1073,7 @@
     },
     marquez: {
       code: 'BAY 05 · MARQUEZ', title: 'Ресторан', request: 'MARQUEZ — ресторан',
-      photo: 'https://images.unsplash.com/photo-1753727471014-efe38840c7c7?w=700&h=500&fit=crop&auto=format&q=80',
+      photo: 'https://images.unsplash.com/photo-1753727471014-efe38840c7c7?w=900&h=600&fit=crop&auto=format&q=80',
       intro: 'От быстрого обеда до полноценного ужина — кухня для тех, кто заехал на час, и для тех, кто пришёл специально поужинать.',
       items: [
         ['Паназиатская кухня', 'Горячие блюда, супы'],
@@ -1441,6 +1114,7 @@
   }
   document.querySelectorAll('.detail-trigger').forEach(btn=>{
     btn.addEventListener('click', (e)=>{
+      e.preventDefault();
       e.stopPropagation();
       openDetail(btn.dataset.detail);
     });
