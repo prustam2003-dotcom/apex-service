@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VITRINA — шоурум премиальных автомобилей</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!--
+  Type system, deliberately distinct from all three references (MARQUEZ: Cormorant Garamond italic +
+  Inter + IBM Plex Mono · OSTRIE: Oswald condensed + Manrope + JetBrains Mono · SILUET: Fraunces +
+  Jost, no mono at all):
+  - "Space Grotesk" for headlines — a tight, geometric grotesk with slightly squared curves and a
+    faint technical/engineering feel (it was literally drawn for a space-agency brand). Where
+    MARQUEZ's serif reads "old dining room", OSTRIE's Oswald reads "stencilled signage" and SILUET's
+    Fraunces reads "fashion editorial", Space Grotesk reads like the badge on a concept car or a
+    spec sheet header — precise, modern, upright, never soft.
+  - "Sora" for body copy — a clean, slightly rounded neutral sans that keeps long paragraphs legible
+    without competing with the display face. It shares no letterforms in common with Inter, Manrope
+    or Jost, so the whole page's texture is new.
+  - "Space Mono" for eyebrows/labels/prices — a true monospace (unlike the other three sites' Plex
+    Mono / JetBrains Mono, or SILUET's total absence of one), chosen for its slightly wider, more
+    mechanical rhythm: it reads like a chassis plate or a spec readout, fitting a showroom that
+    treats every car like a catalogued object.
+  Palette, also deliberately distinct from all three: MARQUEZ is dark burgundy ink + warm copper,
+  OSTRIE is dark warm-brown charcoal + brass, SILUET is light warm ivory + dusty rose/sage. VITRINA
+  instead runs a COOL graphite — a blue-grey "gunmetal" ink (not brown/warm like OSTRIE's charcoal)
+  paired with a cool steel-blue accent and a chrome-silver highlight: the palette of a matte
+  concrete gallery under directional studio light, not a dining room or a barbershop. No copper,
+  no brass, no rose anywhere on this page.
+-->
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230e1116'/%3E%3Ctext x='50' y='68' font-size='52' font-family='Georgia,serif' fill='%237fa8c4' text-anchor='middle'%3EV%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    /* cool graphite/gunmetal base — see palette comment above */
+    --ink:#0e1116; --ink-rgb:14,17,22; --ink2:#171b21; --card:#1d2229;
+    --paper:#eef1f4; --stone:#9aa4b0; --stone-dim:#5f6874;
+    --line-soft:rgba(238,241,244,0.11);
+    --steel:#5f8fae; --steel-soft:#8fbedc;
+    /* fixed light tones for text laid over darkened photo backgrounds — independent of any theme */
+    --op-paper:#eef2f5; --op-stone:#b9c2cb; --op-eyebrow:#8fbedc;
+    --gunmetal-deep:#05070a; --gunmetal-glow:rgba(95,143,174,0.16);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--ink);color:var(--paper);
+    font-family:'Sora',sans-serif;font-size:16px;line-height:1.65;font-weight:300;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%;display:block;}
+  a{color:inherit;text-decoration:none;}
+  .head{font-family:'Space Grotesk',sans-serif;}
+  .mono{font-family:'Space Mono',monospace;}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 24px;}
+  .eyebrow{font-family:'Space Mono',monospace;font-size:11.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--steel-soft);}
+  .eyebrow-bracket{display:inline-flex;align-items:center;gap:10px;}
+  .eyebrow-bracket::before, .eyebrow-bracket::after{content:'';width:20px;height:1px;background:currentColor;opacity:0.55;}
+  .section-pad{padding:100px 0;}
+  @media (max-width:720px){ .section-pad{padding:64px 0;} }
+
+  /* NAV */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 0;
+    background:rgba(var(--ink-rgb),0.6);
+    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;}
+  .logo{font-family:'Space Grotesk',sans-serif;font-size:22px;letter-spacing:0.1em;font-weight:600;color:var(--paper);}
+  .nav-links{display:flex;align-items:center;gap:28px;}
+  .nav-link{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.04em;color:var(--stone);transition:color .25s ease;}
+  .nav-link:hover{color:var(--steel-soft);}
+  .nav-actions{display:flex;align-items:center;gap:14px;}
+  @media (max-width:900px){ .nav-links{display:none;} }
+
+  .btn-line{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.05em;
+    color:var(--stone);border:1px solid var(--line-soft);
+    padding:8px 14px;border-radius:999px;transition:border-color .25s ease, color .25s ease;
+    white-space:nowrap;
+  }
+  .btn-line:hover{border-color:var(--steel);color:var(--steel-soft);}
+  .hero-actions .btn-line{color:var(--op-stone);border-color:rgba(238,242,245,0.28);}
+  .hero-actions .btn-line:hover{color:var(--op-eyebrow);border-color:var(--op-eyebrow);}
+
+  /* HERO */
+  .hero{
+    position:relative;min-height:100vh;display:flex;align-items:flex-end;
+    padding-bottom:90px;overflow:hidden;
+  }
+  .hero-bg{position:absolute;inset:0;z-index:0;}
+  .hero-bg img{width:100%;height:100%;object-fit:cover;filter:brightness(0.46) saturate(0.9) contrast(1.05);}
+  .hero-bg::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(to top, var(--ink) 5%, rgba(14,17,22,0.14) 55%, rgba(14,17,22,0.56) 100%);
+  }
+  .hero-inner{position:relative;z-index:1;color:var(--op-paper);}
+  .hero-inner .eyebrow{color:var(--op-eyebrow);}
+  .hero h1{
+    font-family:'Space Grotesk',sans-serif;font-weight:600;
+    font-size:clamp(46px,9vw,116px);line-height:0.96;margin:18px 0 22px;
+    max-width:880px;text-wrap:balance;letter-spacing:-0.01em;
+  }
+  .hero h1 em{font-style:normal;color:var(--op-eyebrow);}
+
+  /* floating blob-masked photo */
+  .hero-blob{
+    position:absolute;z-index:1;right:6%;bottom:14%;width:224px;height:224px;
+    border-radius:60% 40% 53% 47% / 46% 57% 43% 54%;
+    overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,0.55), 0 0 0 1px rgba(143,190,220,0.25) inset;
+    animation:blobDrift 9s ease-in-out infinite;
+  }
+  .hero-blob img{width:100%;height:100%;object-fit:cover;filter:saturate(1.0) brightness(0.92);}
+  @keyframes blobDrift{
+    0%,100%{ border-radius:60% 40% 53% 47% / 46% 57% 43% 54%; transform:translateY(0) rotate(0deg); }
+    50%{ border-radius:45% 55% 40% 60% / 57% 43% 57% 43%; transform:translateY(-14px) rotate(-3deg); }
+  }
+  @media (max-width:900px){ .hero-blob{display:none;} }
+  @media (prefers-reduced-motion: reduce){ .hero-blob{animation:none;} }
+  .hero-sub{max-width:490px;color:var(--op-stone);font-size:16.5px;margin-bottom:34px;}
+  .hero-actions{display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+
+  .btn-steel{
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--steel);color:var(--ink);
+    font-family:'Space Mono',monospace;font-size:12.5px;letter-spacing:0.06em;text-transform:uppercase;
+    padding:16px 30px;border:none;cursor:pointer;transition:background .25s ease, transform .25s ease;
+  }
+  .btn-steel:hover{background:var(--steel-soft);}
+
+  /* CONCEPT */
+  .concept-grid{display:grid;grid-template-columns:0.85fr 1.15fr;gap:70px;align-items:start;}
+  .concept-grid h2{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(28px,3.8vw,42px);line-height:1.1;}
+  .concept-grid h2 em{font-style:normal;color:var(--steel-soft);}
+  .concept-grid p{color:var(--stone);max-width:54ch;}
+  @media (max-width:820px){ .concept-grid{grid-template-columns:1fr;gap:28px;} }
+
+  /* MODELS ("MENU") */
+  .menu-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:50px;flex-wrap:wrap;}
+  .menu-head h2{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(30px,4.2vw,46px);}
+  .menu-head h2 em{font-style:normal;color:var(--steel-soft);}
+  .model-list{display:grid;grid-template-columns:1fr 1fr;gap:0 60px;}
+  @media (max-width:720px){ .model-list{grid-template-columns:1fr;} }
+  .model-item{
+    display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+    padding:22px 0;border-bottom:1px solid var(--line-soft);cursor:default;
+  }
+  .model-item-name{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:500;letter-spacing:0.005em;}
+  .model-item-desc{color:var(--stone-dim);font-size:13.5px;margin-top:4px;max-width:36ch;}
+  .model-item-price{font-family:'Space Mono',monospace;font-size:13px;color:var(--steel-soft);white-space:nowrap;}
+
+  /* MODEL HOVER PREVIEW — cursor-following panel */
+  .model-preview{
+    position:fixed;top:0;left:0;width:190px;height:240px;z-index:250;
+    pointer-events:none;overflow:hidden;opacity:0;
+    transform:translate(-50%,-60%) scale(0.92);
+    transition:opacity .28s ease, transform .28s ease;
+    box-shadow:0 24px 60px rgba(0,0,0,0.5);
+  }
+  .model-preview.show{opacity:1;transform:translate(-50%,-60%) scale(1);}
+  .model-preview img{width:100%;height:100%;object-fit:cover;filter:saturate(0.96) brightness(0.9);}
+  @media (max-width:900px){ .model-preview{display:none;} }
+
+  /* MODEL CATEGORIES */
+  .model-cat{margin-bottom:56px;transition:opacity .4s ease, transform .4s ease;}
+  .model-cat:last-child{margin-bottom:0;}
+  .model-cat-title{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--stone-dim);margin-bottom:8px;padding-bottom:14px;border-bottom:1px solid var(--line-soft);}
+
+  /* MODEL PILL TABS */
+  .model-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:44px;}
+  .model-tab{
+    font-family:'Space Mono',monospace;font-size:11.5px;letter-spacing:0.05em;text-transform:uppercase;
+    padding:10px 20px;border-radius:999px;border:1px solid var(--line-soft);
+    background:transparent;color:var(--stone);cursor:pointer;transition:background .25s ease, color .25s ease, border-color .25s ease;
+  }
+  .model-tab.active{background:var(--steel);color:var(--ink);border-color:var(--steel);}
+  .model-tab:not(.active):hover{border-color:var(--steel-soft);color:var(--steel-soft);}
+  .model-cat[hidden]{display:none;}
+
+  /* GALLERY carousel */
+  .gallery-carousel{
+    display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;
+    padding-bottom:6px;margin:0 -24px;padding-left:24px;padding-right:24px;
+    scrollbar-width:none;
+  }
+  .gallery-carousel::-webkit-scrollbar{display:none;}
+  .gallery-carousel .g-card{
+    flex:0 0 auto;width:min(72%,460px);aspect-ratio:4/5;scroll-snap-align:start;
+    border-radius:4px;overflow:hidden;
+  }
+  .gallery-carousel .g-card img{width:100%;height:100%;object-fit:cover;filter:saturate(0.92) brightness(0.9);}
+  .gallery-dots{display:flex;gap:8px;justify-content:center;margin-top:22px;}
+  .gallery-dot{width:6px;height:6px;border-radius:50%;background:var(--line-soft);transition:background .3s ease, transform .3s ease;}
+  .gallery-dot.active{background:var(--steel-soft);transform:scale(1.4);}
+
+  /* TEAM / CURATION section */
+  .team-section{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+  .team-photo{aspect-ratio:4/5;overflow:hidden;}
+  .team-photo img{width:100%;height:100%;object-fit:cover;filter:saturate(0.9) brightness(0.86);}
+  .team-text h2{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(26px,3.8vw,38px);margin-bottom:18px;line-height:1.14;}
+  .team-text h2 em{font-style:normal;color:var(--steel-soft);}
+  .team-text p{color:var(--stone);max-width:44ch;}
+  @media (max-width:820px){ .team-section{grid-template-columns:1fr;gap:28px;} .team-section.reverse .team-photo{order:-1;} }
+
+  /* INFO STRIP */
+  .info-strip{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:40px;
+    border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);
+    padding:50px 0;
+  }
+  .info-strip h4{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--stone-dim);margin-bottom:14px;font-family:'Space Mono',monospace;}
+  .info-strip p{font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:19px;color:var(--paper);}
+  @media (max-width:720px){ .info-strip{grid-template-columns:1fr;gap:24px;} }
+
+  /* FOOTER */
+  footer{padding:60px 0 40px;}
+  .footer-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;color:var(--stone-dim);font-size:12.5px;}
+
+  /* BOOKING MODAL */
+  .book-overlay{
+    position:fixed;inset:0;background:rgba(3,4,6,0.74);z-index:200;
+    display:flex;align-items:center;justify-content:center;padding:20px;
+    opacity:0;pointer-events:none;transition:opacity .3s ease;
+  }
+  .book-overlay.open{opacity:1;pointer-events:auto;}
+  .book-modal{
+    background:var(--card);border:1px solid var(--line-soft);max-width:420px;width:100%;
+    padding:40px 34px;position:relative;
+    transform:translateY(16px);transition:transform .3s ease;
+  }
+  .book-overlay.open .book-modal{transform:translateY(0);}
+  .book-close{position:absolute;top:16px;right:18px;background:none;border:none;color:var(--stone-dim);font-size:22px;cursor:pointer;line-height:1;}
+  .book-close:hover{color:var(--paper);}
+  .book-modal h3{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:600;margin:0 0 6px;}
+  .book-sub{color:var(--stone-dim);font-size:13px;margin-bottom:24px;}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  label{display:block;font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:0.07em;text-transform:uppercase;color:var(--stone-dim);margin:16px 0 7px;}
+  input, textarea, select{
+    width:100%;background:var(--ink2);border:1px solid var(--line-soft);color:var(--paper);
+    padding:11px 13px;font-family:'Sora',sans-serif;font-size:14px;
+  }
+  input:focus, textarea:focus, select:focus{outline:none;border-color:var(--steel);}
+  .book-submit{width:100%;margin-top:26px;}
+  .book-success{text-align:center;}
+  .book-success .eyebrow{display:block;margin-bottom:14px;}
+
+  /* REVEAL — continuous scroll-linked motion */
+  .reveal{opacity:0;transform:translateY(64px) scale(.97);will-change:opacity,transform;}
+  .reveal.in{opacity:1;transform:none;}
+
+  /* ATMOSPHERE */
+  .atmos-section{position:relative;overflow:hidden;}
+  .atmos-bg{position:relative;height:78vh;overflow:hidden;}
+  .atmos-bg img{width:100%;height:100%;object-fit:cover;filter:saturate(0.82) brightness(0.56);}
+  .atmos-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to top, var(--ink) 2%, rgba(14,17,22,0.05) 40%, rgba(14,17,22,0.36) 100%);}
+  .atmos-caption{position:absolute;left:0;right:0;bottom:0;padding:0 0 56px;}
+  .atmos-caption .wrap{display:grid;grid-template-columns:0.9fr 1.1fr;gap:60px;align-items:end;}
+  .atmos-caption{color:var(--op-paper);}
+  .atmos-caption .eyebrow{color:var(--op-eyebrow);}
+  .atmos-caption h2{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(28px,4vw,44px);line-height:1.08;}
+  .atmos-caption h2 em{font-style:normal;color:var(--op-eyebrow);}
+  .atmos-caption p{color:var(--op-stone);max-width:48ch;}
+  @media (max-width:820px){ .atmos-caption .wrap{grid-template-columns:1fr;gap:18px;} .atmos-bg{height:56vh;} }
+
+  /* SHOWCASE PIN — sticky scroll-driven showcase, 4 crossfading stops */
+  .showcase-pin-wrap{position:relative;height:400vh;}
+  .showcase-pin-sticky{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;align-items:center;}
+  .showcase-pin-bg{position:absolute;inset:0;}
+  .showcase-pin-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:none;filter:saturate(0.88) brightness(0.55);}
+  .showcase-pin-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to top, var(--ink) 0%, rgba(14,17,22,0.1) 45%, rgba(14,17,22,0.5) 100%);}
+  .showcase-pin-content{position:relative;z-index:1;width:100%;}
+  .showcase-pin-content{color:var(--op-paper);}
+  .showcase-pin-eyebrow{margin-bottom:14px;color:var(--op-eyebrow);}
+  .showcase-pin-name{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(34px,6.2vw,74px);line-height:1.02;max-width:780px;}
+  .showcase-pin-name em{font-style:normal;color:var(--op-eyebrow);}
+  .showcase-pin-desc{color:var(--op-stone);max-width:46ch;margin-top:16px;font-size:16px;}
+  .showcase-pin-index{position:absolute;right:24px;bottom:40px;z-index:1;font-family:'Space Mono',monospace;font-size:12px;color:var(--op-stone);letter-spacing:0.1em;}
+  .showcase-pin-index b{color:var(--op-eyebrow);font-weight:700;}
+  .showcase-pin-dots{position:absolute;left:24px;bottom:44px;z-index:1;display:flex;flex-direction:column;gap:8px;}
+  .showcase-pin-dot{width:6px;height:6px;border-radius:50%;background:var(--line-soft);transition:background .3s ease, transform .3s ease;}
+  .showcase-pin-dot.active{background:var(--op-eyebrow);transform:scale(1.4);}
+  @media (max-width:720px){ .showcase-pin-wrap{height:340vh;} .showcase-pin-index,.showcase-pin-dots{display:none;} }
+
+  /* GRAIN — subtle film texture over the whole page */
+  .grain{
+    position:fixed;inset:0;z-index:300;pointer-events:none;opacity:0.045;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* PRELOADER */
+  #preloader{
+    position:fixed;inset:0;z-index:500;background:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    transition:opacity .7s ease, visibility .7s ease;
+  }
+  #preloader .logo{font-size:28px;color:var(--paper);opacity:0;animation:preloaderIn 1.1s ease forwards .1s;}
+  #preloader.hide{opacity:0;visibility:hidden;}
+  @keyframes preloaderIn{ from{opacity:0;letter-spacing:0.3em;} to{opacity:1;letter-spacing:0.1em;} }
+
+  /* MARQUEE TICKER */
+  .marquee{
+    overflow:hidden;white-space:nowrap;border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);
+    padding:22px 0;background:var(--ink2);
+  }
+  .marquee-track{display:inline-flex;animation:marqueeScroll 32s linear infinite;}
+  .marquee-track span{
+    font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:clamp(19px,2.4vw,28px);
+    color:var(--stone);padding:0 34px;white-space:nowrap;letter-spacing:0.01em;
+  }
+  .marquee-track span em{color:var(--steel-soft);font-style:normal;}
+  @keyframes marqueeScroll{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+  @media (prefers-reduced-motion: reduce){ .marquee-track{animation:none;} }
+
+  /* STATS */
+  .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center;}
+  .stat-num{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(34px,5vw,58px);color:var(--steel-soft);line-height:1;}
+  .stat-label{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:0.09em;text-transform:uppercase;color:var(--stone-dim);margin-top:10px;}
+  @media (max-width:720px){ .stats-row{grid-template-columns:1fr 1fr;gap:36px 20px;} }
+
+  /* MANIFESTO — dark, fixed-tone interlude, independent of the page theme */
+  .manifesto{background:var(--gunmetal-deep);padding:170px 0;text-align:center;position:relative;overflow:hidden;}
+  .manifesto::before{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(ellipse at 50% 40%, var(--gunmetal-glow), transparent 62%);
+  }
+  .manifesto-text{position:relative;font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:clamp(22px,4vw,42px);line-height:1.5;max-width:920px;margin:0 auto;}
+  .manifesto-text span{display:block;color:var(--op-paper);}
+  .manifesto-text span em{color:var(--op-eyebrow);font-style:normal;}
+
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
+</style>
+</head>
+<body>
+
+<div id="preloader"><span class="logo head">VITRINA</span></div>
+<div class="grain"></div>
+<div class="model-preview" id="modelPreview"><img id="modelPreviewImg" src="" alt=""></div>
+
+<nav>
+  <div class="wrap">
+    <span class="logo">VITRINA</span>
+    <div class="nav-links">
+      <a class="nav-link" href="#models">Коллекция</a>
+      <a class="nav-link" href="#showcase">Услуги</a>
+      <a class="nav-link" href="#gallery">Галерея</a>
+      <a class="nav-link" href="#contacts">Контакты</a>
+    </div>
+    <div class="nav-actions">
+      <button type="button" class="btn-steel" id="bookOpen" style="padding:11px 20px;font-size:11.5px;">Записаться на показ</button>
+      <a class="btn-line" href="index.html">← M²</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg">
+    <img src="https://images.unsplash.com/photo-1767907571229-01cf4ba03590?q=80&w=2400&auto=format&fit=crop" alt="">
+  </div>
+  <div class="hero-blob">
+    <img src="https://images.unsplash.com/photo-1757910869199-c5832bd15f11?q=80&w=700&auto=format&fit=crop" alt="Деталь колеса на витрине VITRINA">
+  </div>
+  <div class="wrap hero-inner">
+    <span class="eyebrow eyebrow-bracket">Внутри M² · Мирабад сквер</span>
+    <h1>Коллекция,<br>которую <em>смотрят</em>,<br>а не листают</h1>
+    <p class="hero-sub">VITRINA — шоурум премиальных и коллекционных автомобилей внутри автомобильного дома M². Кураторская подборка, приватные показы и консигнация — на одном этаже с мойкой и детейлингом.</p>
+    <div class="hero-actions">
+      <button type="button" class="btn-steel" id="bookOpen2">Записаться на показ</button>
+      <a class="btn-line" href="index.html">← Вернуться на сайт мойки M²</a>
+    </div>
+  </div>
+</section>
+
+<section class="marquee">
+  <div class="marquee-track">
+    <span>Эксклюзив <em>·</em> Консигнация <em>·</em> Тест-драйв <em>·</em> Детейлинг <em>·</em> Хранение <em>·</em> VITRINA <em>·</em></span>
+    <span>Эксклюзив <em>·</em> Консигнация <em>·</em> Тест-драйв <em>·</em> Детейлинг <em>·</em> Хранение <em>·</em> VITRINA <em>·</em></span>
+  </div>
+</section>
+
+<section class="section-pad">
+  <div class="wrap concept-grid reveal">
+    <div>
+      <span class="eyebrow eyebrow-bracket">Концепция</span>
+      <h2 style="margin-top:16px;">Не продажа —<br><em>кураторство</em></h2>
+    </div>
+    <p>VITRINA — это не дилерский центр и не парковка объявлений. Каждый автомобиль в ротации отобран вручную: состояние, история, редкость. Мы работаем с частными коллекционерами и владельцами, которые готовы доверить свой автомобиль витрине, а не объявлению на сайте. Консигнация, приватный показ и индивидуальный подбор — без давления и без очереди.</p>
+  </div>
+</section>
+
+<section class="section-pad" style="padding-top:0;">
+  <div class="wrap stats-row reveal">
+    <div>
+      <div class="stat-num" data-count="34">0</div>
+      <div class="stat-label">Автомобилей в ротации</div>
+    </div>
+    <div>
+      <div class="stat-num" data-count="9">0</div>
+      <div class="stat-label">Лет кураторской работы</div>
+    </div>
+    <div>
+      <div class="stat-num" data-count="250" data-suffix=" 000 $">0</div>
+      <div class="stat-label">Средний чек сделки</div>
+    </div>
+    <div>
+      <div class="stat-num" data-count="1400" data-suffix=" м²">0</div>
+      <div class="stat-label">Площадь шоурума</div>
+    </div>
+  </div>
+</section>
+
+<section class="atmos-section">
+  <div class="atmos-bg">
+    <img src="https://images.unsplash.com/photo-1780319234030-281034892350?q=80&w=1800&auto=format&fit=crop" alt="Интерьер шоурума VITRINA" loading="lazy">
+  </div>
+  <div class="atmos-caption">
+    <div class="wrap reveal">
+      <div>
+        <span class="eyebrow eyebrow-bracket">Атмосфера</span>
+        <h2 style="margin-top:16px;">Бетон, стекло<br>и <em>студийный свет</em></h2>
+      </div>
+      <p>Каждый автомобиль подсвечен как экспонат: направленный свет, тёмный подиум, ничего лишнего в кадре. Галерея работает как музей — здесь не торопят и не давят продажей. Можно приехать просто посмотреть, без записи на конкретную модель.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad" id="models" style="background:var(--ink2);">
+  <div class="wrap">
+    <div class="menu-head reveal">
+      <h2>Наша <em>коллекция</em></h2>
+      <span class="eyebrow">Цены указаны в долларах США</span>
+    </div>
+
+    <div class="model-tabs reveal" id="modelTabs">
+      <button type="button" class="model-tab active" data-target="sport">Спорткары</button>
+      <button type="button" class="model-tab" data-target="lux">Люкс-седаны и внедорожники</button>
+      <button type="button" class="model-tab" data-target="collector">Коллекционные и раритетные</button>
+    </div>
+
+    <div class="model-cat reveal" data-cat="sport">
+      <div class="model-cat-title">Спорткары</div>
+      <div class="model-list">
+        <div class="model-item" data-img="https://images.unsplash.com/photo-1744294337417-d6c49912c43e?q=80&w=700&auto=format&fit=crop">
+          <div>
+            <div class="model-item-name">GT-купе, твин-турбо V8</div>
+            <div class="model-item-desc">580 л.с., карбоновый обвес, один владелец</div>
+          </div>
+          <div class="model-item-price">от $210 000</div>
+        </div>
+        <div class="model-item" data-img="https://images.unsplash.com/photo-1760520830355-e6be53e41c2f?q=80&w=700&auto=format&fit=crop">
+          <div>
+            <div class="model-item-name">Родстер, атмосферный V10</div>
+            <div class="model-item-desc">Открытый верх, юбилейная серия, 3 200 км пробега</div>
+          </div>
+          <div class="model-item-price">от $265 000</div>
+        </div>
+        <div class="model-item" data-img="https://images.unsplash.com/photo-1742226111386-b6a84ef8e660?q=80&w=700&auto=format&fit=crop">
+          <div>
+            <div class="model-item-name">Трековый спецвыпуск</div>
+            <div class="model-item-desc">Лимитированная серия, керамические тормоза</div>
+          </div>
+          <div class="model-item-price">от $340 000</div>
+        </div>
+        <div class="model-item" data-img="https://images.unsplash.com/photo-1767907571229-01cf4ba03590?q=80&w=700&auto=format&fit=crop">
+          <div>
+            <div class="model-item-name">Гибридный гиперкар</div>
+            <div class="model-item-desc">Полный привод, 1000+ л.с., заводская гарантия</div>
+          </div>
+          <div class="model-item-price">от $480 000</div>
+        </div>
+        <div class="model-item" data-img="https://images.unsplash.com/photo-1566844646708-f728e915ee73?q=80&w=700&auto=format&fit=crop">
+          <div>
+            <div class="model-item-name">Купе Гран Туризмо</div>
+            <div class="model-item-desc">Атмосферный V12, ручная сборка салона</div>
+          </div>
+          <div class="model-item-price">от $295 000</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="model-cat reveal" data-cat="lux" hidden>
+      <div class="model-cat-title">Люкс-седаны и внедорожники</div>
+      <div class="model-list">
+        <div class="model-item" data-img="https://images.unsplash.com/photo-1760161339261-56487b766a17?q=80&w=700&auto=format&fit=crop">
+          <div>
+            <div class="model-item-name">Флагманский седан, удлинённая база</div>
+            <div class="model-item-desc">Массаж передних кресел, полный привод</div>
+          </div>
+          <div class="model-item-price">от $145 000</div>
+        </div>
+        <div class="model-item" data-img="https://images.unsplash.com/photo-1566844646708-f728e915ee73?q=80&w=700&auto=format&fit=crop">
+          <div>
+            <div class="model-item-name">Люкс-внедорожник</div>
+            <div class="model-item-desc">Пневмоподвеска, три ряда сидений, панорама</div>
+          </div>
+          <div class="model-item-price">от $165 000</div>
+        </div>
+        <div class="model-item" data-img="https://images.unsplash.com/photo-1760520830355-e6be53e41c2f?q=80&w=700&auto=format&fit=crop">
+          <div>
+            <div class="model-item-name">Спортивный внедорожник</div>
+            <div class="model-item-desc">Твин-турбо V8, спортивные дифференциалы</div>
+          </div>
+          <div class="model-item-price">от $190 000</div>
+        </div>
+        <div class="model-item" data-img="https://images.unsplash.com/photo-1760161339261-56487b766a17?q=80&w=700&auto=format&fit=crop">
+          <div>
+            <div class="model-item-name">Представительский седан, бронированный</div>
+            <div class="model-item-desc">Уровень защиты B6, шумоизоляция салона</div>
+          </div>
+          <div class="model-item-price">от $310 000</div>
+        </div>
+        <div class="model-item" data-img="https://images.unsplash.com/photo-1780319234030-281034892350?q=80&w=700&auto=format&fit=crop">
+          <div>
+            <div class="model-item-name">Электрический флагман</div>
+            <div class="model-item-desc">Запас хода 600+ км, автопилот второго уровня</div>
+          </div>
+          <div class="model-item-price">от $135 000</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="model-cat reveal" data-cat="collector" hidden>
+      <div class="model-cat-title">Коллекционные и раритетные</div>
+      <div class="model-list">
+        <div class="model-item" data-img="https://images.unsplash.com/photo-1757910869199-c5832bd15f11?q=80&w=700&auto=format&fit=crop">
+          <div>
+            <div class="model-item-name">Неоклассика 90-х</div>
+            <div class="model-item-desc">Оригинальный кузов, реставрация двигателя, сертификат подлинности</div>
+          </div>
+          <div class="model-item-price">от $120 000</div>
+        </div>
+        <div class="model-item" data-img="https://images.unsplash.com/photo-1566844646708-f728e915ee73?q=80&w=700&auto=format&fit=crop">
+          <div>
+            <div class="model-item-name">Гран-туризмо 1960-х</div>
+            <div class="model-item-desc">Матчинг-номера, полная документация</div>
+          </div>
+          <div class="model-item-price">от $650 000</div>
+        </div>
+        <div class="model-item" data-img="https://images.unsplash.com/photo-1744294337417-d6c49912c43e?q=80&w=700&auto=format&fit=crop">
+          <div>
+            <div class="model-item-name">Родстер лимитированной серии</div>
+            <div class="model-item-desc">Один из 300, полная история обслуживания</div>
+          </div>
+          <div class="model-item-price">от $380 000</div>
+        </div>
+        <div class="model-item" data-img="https://images.unsplash.com/photo-1742226111386-b6a84ef8e660?q=80&w=700&auto=format&fit=crop">
+          <div>
+            <div class="model-item-name">Заводской раллийный экземпляр</div>
+            <div class="model-item-desc">Гомологационная версия, каркас безопасности</div>
+          </div>
+          <div class="model-item-price">от $410 000</div>
+        </div>
+        <div class="model-item" data-img="https://images.unsplash.com/photo-1760520830355-e6be53e41c2f?q=80&w=700&auto=format&fit=crop">
+          <div>
+            <div class="model-item-name">Коллекционное купе, единственный экземпляр в стране</div>
+            <div class="model-item-desc">Индивидуальный заказ у завода</div>
+          </div>
+          <div class="model-item-price">от $520 000</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="showcase-pin-wrap" id="showcasePin">
+  <div class="showcase-pin-sticky">
+    <div class="showcase-pin-bg">
+      <img data-stop="0" src="https://images.unsplash.com/photo-1760520830355-e6be53e41c2f?q=80&w=1800&auto=format&fit=crop" alt="Подбор и консигнация">
+      <img data-stop="1" src="https://images.unsplash.com/photo-1780319234030-281034892350?q=80&w=1800&auto=format&fit=crop" alt="Приватный показ">
+      <img data-stop="2" src="https://images.unsplash.com/photo-1744294337417-d6c49912c43e?q=80&w=1800&auto=format&fit=crop" alt="Тест-драйв">
+      <img data-stop="3" src="https://images.unsplash.com/photo-1761934657948-708146148588?q=80&w=1800&auto=format&fit=crop" alt="Детейлинг и хранение">
+    </div>
+    <div class="showcase-pin-content">
+      <div class="wrap">
+        <span class="eyebrow showcase-pin-eyebrow" id="pinEyebrow">01 · Консигнация</span>
+        <h3 class="showcase-pin-name" id="pinName">Подбор<br>и консигнация</h3>
+        <p class="showcase-pin-desc" id="pinDesc">Помогаем найти автомобиль под задачу или разместить ваш собственный на витрине — оценку, документы и работу с покупателем берём на себя.</p>
+      </div>
+    </div>
+    <div class="showcase-pin-dots" id="pinDots">
+      <div class="showcase-pin-dot active"></div>
+      <div class="showcase-pin-dot"></div>
+      <div class="showcase-pin-dot"></div>
+      <div class="showcase-pin-dot"></div>
+    </div>
+    <div class="showcase-pin-index"><b id="pinNum">01</b> / 04</div>
+  </div>
+</section>
+
+<section class="manifesto">
+  <div class="wrap">
+    <p class="manifesto-text">
+      <span class="reveal">Здесь не уговаривают.</span>
+      <span class="reveal">Здесь <em>показывают</em> автомобиль таким, какой он есть —</span>
+      <span class="reveal">и дают время услышать двигатель, а не менеджера.</span>
+    </p>
+  </div>
+</section>
+
+<section class="section-pad" id="gallery">
+  <div class="wrap">
+    <div class="gallery-carousel reveal" id="galleryCarousel">
+      <div class="g-card"><img src="https://images.unsplash.com/photo-1742226111386-b6a84ef8e660?q=80&w=900&auto=format&fit=crop" alt="Фара крупным планом" loading="lazy"></div>
+      <div class="g-card"><img src="https://images.unsplash.com/photo-1757910869199-c5832bd15f11?q=80&w=900&auto=format&fit=crop" alt="Колесо и тормозной суппорт" loading="lazy"></div>
+      <div class="g-card"><img src="https://images.unsplash.com/photo-1760161339261-56487b766a17?q=80&w=900&auto=format&fit=crop" alt="Кожаный салон" loading="lazy"></div>
+      <div class="g-card"><img src="https://images.unsplash.com/photo-1566844646708-f728e915ee73?q=80&w=900&auto=format&fit=crop" alt="Экстерьер люксового автомобиля" loading="lazy"></div>
+      <div class="g-card"><img src="https://images.unsplash.com/photo-1744294337417-d6c49912c43e?q=80&w=900&auto=format&fit=crop" alt="Спорткар в драматичном свете" loading="lazy"></div>
+      <div class="g-card"><img src="https://images.unsplash.com/photo-1761934657948-708146148588?q=80&w=900&auto=format&fit=crop" alt="Детейлинг кузова" loading="lazy"></div>
+    </div>
+    <div class="gallery-dots" id="galleryDots"></div>
+  </div>
+</section>
+
+<section class="section-pad" id="showcase">
+  <div class="wrap team-section reveal">
+    <div class="team-photo">
+      <img src="https://images.unsplash.com/photo-1780319234030-281034892350?q=80&w=900&auto=format&fit=crop" alt="Кураторская команда VITRINA">
+    </div>
+    <div class="team-text">
+      <span class="eyebrow eyebrow-bracket">Кураторы</span>
+      <h2 style="margin-top:16px;">Каждый автомобиль —<br><em>своя история</em></h2>
+      <p>Команда VITRINA — эксперты по оценке состояния, истории обслуживания и подлинности. Перед тем как автомобиль встанет на подиум, мы проверяем документы, пробег и следы кузовного ремонта — и рассказываем об этом честно, а не только в рекламном описании.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="contacts">
+  <div class="info-strip reveal">
+    <div>
+      <h4>Часы работы</h4>
+      <p>10:00 — 21:00, по предварительной записи</p>
+    </div>
+    <div>
+      <h4>Расположение</h4>
+      <p>Сквер Мирабад, отдельный павильон M²</p>
+    </div>
+    <div>
+      <h4>Запись на показ</h4>
+      <p>По телефону или на сайте, за 2 часа</p>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad" style="text-align:center;">
+  <div class="wrap reveal">
+    <span class="eyebrow">Место на подиуме свободно</span>
+    <h2 class="head" style="font-size:clamp(26px,3.8vw,40px);margin:16px 0 30px;font-weight:600;">Оставьте заявку —<br><em style="color:var(--steel-soft);">подтвердим за 15 минут</em></h2>
+    <div class="hero-actions" style="justify-content:center;">
+      <button type="button" class="btn-steel" id="bookOpen3">Записаться на показ</button>
+      <a class="btn-line" href="index.html" style="color:var(--stone);border-color:var(--line-soft);">← Вернуться на сайт мойки M²</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-row reveal">
+    <span>VITRINA — шоурум премиальных автомобилей внутри M², Мирабад сквер</span>
+    <span>+998 XX XXX XX XX · hello@vitrina.m2.uz</span>
+    <a class="btn-line" href="index.html">← M² · Мойка и детейлинг</a>
+  </div>
+</footer>
+
+<div class="book-overlay" id="bookOverlay">
+  <div class="book-modal">
+    <button class="book-close" id="bookClose" aria-label="Закрыть">×</button>
+    <div id="bookForm">
+      <span class="eyebrow">VITRINA · Запись на показ</span>
+      <h3>Записаться на просмотр</h3>
+      <p class="book-sub">Ответим и подтвердим в течение 15 минут.</p>
+      <form id="reserveForm">
+        <label for="resName">Имя</label>
+        <input type="text" id="resName" placeholder="Ваше имя" required>
+        <label for="resPhone">Телефон</label>
+        <input type="tel" id="resPhone" placeholder="+998 XX XXX XX XX" required>
+        <div class="field-row">
+          <div>
+            <label for="resDate">Дата</label>
+            <input type="date" id="resDate" required>
+          </div>
+          <div>
+            <label for="resTime">Время</label>
+            <input type="time" id="resTime" value="16:00" required>
+          </div>
+        </div>
+        <label for="resCar">Интересующий автомобиль</label>
+        <select id="resCar">
+          <option>GT-купе, твин-турбо V8</option>
+          <option>Люкс-внедорожник</option>
+          <option>Представительский седан, бронированный</option>
+          <option>Гран-туризмо 1960-х</option>
+          <option>Пока не определился(-лась) — нужна консультация</option>
+        </select>
+        <button type="submit" class="btn-steel book-submit">Отправить заявку</button>
+      </form>
+    </div>
+    <div id="bookSuccess" class="book-success" style="display:none;">
+      <span class="eyebrow">Заявка отправлена</span>
+      <h3 style="margin-top:14px;" id="bookNumber">VT-000000</h3>
+      <p class="book-sub" id="bookSummary"></p>
+      <button type="button" class="btn-line" id="bookCloseBtn" style="margin-top:10px;display:inline-block;">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const bookOverlay = document.getElementById('bookOverlay');
+  const bookClose = document.getElementById('bookClose');
+  const bookCloseBtn = document.getElementById('bookCloseBtn');
+  const reserveForm = document.getElementById('reserveForm');
+  const bookForm = document.getElementById('bookForm');
+  const bookSuccess = document.getElementById('bookSuccess');
+  const bookNumber = document.getElementById('bookNumber');
+  const bookSummary = document.getElementById('bookSummary');
+
+  function openBooking(){
+    bookOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    bookForm.style.display = 'block';
+    bookSuccess.style.display = 'none';
+    reserveForm.reset();
+    document.getElementById('resTime').value = '16:00';
+  }
+  function closeBooking(){
+    bookOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('bookOpen').addEventListener('click', openBooking);
+  document.getElementById('bookOpen2').addEventListener('click', openBooking);
+  document.getElementById('bookOpen3').addEventListener('click', openBooking);
+  bookClose.addEventListener('click', closeBooking);
+  bookCloseBtn.addEventListener('click', closeBooking);
+  bookOverlay.addEventListener('click', (e)=>{ if(e.target === bookOverlay) closeBooking(); });
+  document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && bookOverlay.classList.contains('open')) closeBooking(); });
+
+  reserveForm.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const name = document.getElementById('resName').value.trim() || 'Гость';
+    const date = document.getElementById('resDate').value;
+    const time = document.getElementById('resTime').value;
+    const car = document.getElementById('resCar').value;
+    const num = 'VT-' + Math.floor(100000 + Math.random()*900000);
+    bookNumber.textContent = num;
+    bookSummary.textContent = name + ', ' + car + (date ? ' · ' + date : '') + (time ? ' в ' + time : '') + '. Мы перезвоним для подтверждения.';
+    bookForm.style.display = 'none';
+    bookSuccess.style.display = 'block';
+  });
+
+  // REVEAL — continuous scroll-linked reveal, runs the whole page down to the footer
+  const revealTargets = Array.from(document.querySelectorAll('.reveal'));
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduceMotion){
+    revealTargets.forEach(el=>{ el.style.opacity = 1; el.style.transform = 'none'; });
+  } else {
+    let revealRaf = null;
+    function updateReveals(){
+      const vh = window.innerHeight;
+      const atBottom = (window.scrollY + vh) >= (document.documentElement.scrollHeight - 120);
+      revealTargets.forEach(el=>{
+        const rect = el.getBoundingClientRect();
+        const start = vh * 0.92, end = vh * 0.55;
+        let p = (start - rect.top) / (start - end);
+        p = Math.min(1, Math.max(0, p));
+        if(atBottom) p = 1;
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.style.opacity = eased;
+        el.style.transform = 'translateY(' + ((1 - eased) * 64) + 'px) scale(' + (0.97 + eased * 0.03) + ')';
+      });
+      revealRaf = null;
+    }
+    function onRevealScroll(){ if(revealRaf) return; revealRaf = requestAnimationFrame(updateReveals); }
+    window.addEventListener('scroll', onRevealScroll, { passive: true });
+    window.addEventListener('resize', onRevealScroll);
+    updateReveals();
+    if(document.fonts && document.fonts.ready){ document.fonts.ready.then(updateReveals); }
+    window.addEventListener('load', updateReveals);
+  }
+
+  // Hero parallax — background drifts and darkens slightly as you scroll away
+  const heroBgImg = document.querySelector('.hero-bg img');
+  if(heroBgImg && !reduceMotion){
+    let heroRaf = null;
+    function updateHero(){
+      const p = Math.min(1, window.scrollY / window.innerHeight);
+      heroBgImg.style.transform = 'scale(' + (1.06 + p * 0.08) + ') translateY(' + (p * 40) + 'px)';
+      heroRaf = null;
+    }
+    window.addEventListener('scroll', ()=>{ if(!heroRaf) heroRaf = requestAnimationFrame(updateHero); }, { passive:true });
+    updateHero();
+  }
+
+  // SHOWCASE PIN — sticky scroll-driven showcase (4 stops, crossfade + copy swap)
+  const showcasePinWrap = document.getElementById('showcasePin');
+  if(showcasePinWrap){
+    const pinImgs = Array.from(showcasePinWrap.querySelectorAll('.showcase-pin-bg img'));
+    const pinDots = Array.from(document.querySelectorAll('#pinDots .showcase-pin-dot'));
+    const pinEyebrow = document.getElementById('pinEyebrow');
+    const pinName = document.getElementById('pinName');
+    const pinDesc = document.getElementById('pinDesc');
+    const pinNum = document.getElementById('pinNum');
+    const stops = [
+      { eyebrow: '01 · Консигнация', name: 'Подбор<br>и консигнация', desc: 'Помогаем найти автомобиль под задачу или разместить ваш собственный на витрине — оценку, документы и работу с покупателем берём на себя.' },
+      { eyebrow: '02 · Показ', name: 'Приватный<br><em>показ</em>', desc: 'Индивидуальный визит без очереди и посторонних глаз — только вы, куратор витрины и автомобиль в студийном свете.' },
+      { eyebrow: '03 · Тест-драйв', name: 'Тест-драйв<br>по записи', desc: 'Маршрут, топливо и сопровождение инструктора включены — прочувствуйте характер автомобиля до принятия решения.' },
+      { eyebrow: '04 · Уход', name: 'Детейлинг<br><em>и хранение</em>', desc: 'Климат-контролируемый бокс, регулярное обслуживание и полная предпродажная подготовка — автомобиль всегда готов к показу.' }
+    ];
+    pinImgs[0].style.opacity = 1;
+    let pinRaf = null;
+    function updateShowcasePin(){
+      const rect = showcasePinWrap.getBoundingClientRect();
+      const total = rect.height - window.innerHeight;
+      if(total <= 0){ pinRaf = null; return; }
+      const scrolled = Math.min(Math.max(-rect.top, 0), total);
+      const p = scrolled / total;
+      const stopCount = stops.length;
+      const idxFloat = p * (stopCount - 1);
+      const idx = Math.min(stopCount - 1, Math.round(idxFloat));
+      pinImgs.forEach((img, i)=>{ img.style.opacity = i === idx ? 1 : 0; });
+      pinDots.forEach((d, i)=>{ d.classList.toggle('active', i === idx); });
+      if(pinName.dataset.idx != idx){
+        pinName.dataset.idx = idx;
+        pinEyebrow.innerHTML = stops[idx].eyebrow;
+        pinName.innerHTML = stops[idx].name;
+        pinDesc.textContent = stops[idx].desc;
+        pinNum.textContent = String(idx + 1).padStart(2, '0');
+      }
+      pinRaf = null;
+    }
+    window.addEventListener('scroll', ()=>{ if(!pinRaf) pinRaf = requestAnimationFrame(updateShowcasePin); }, { passive:true });
+    window.addEventListener('resize', updateShowcasePin);
+    updateShowcasePin();
+  }
+
+  // PRELOADER — brief logo intro, then reveal the page
+  const preloader = document.getElementById('preloader');
+  if(preloader){
+    const hidePreloader = () => {
+      preloader.classList.add('hide');
+      setTimeout(()=>{ preloader.remove(); }, 750);
+    };
+    if(reduceMotion){
+      hidePreloader();
+    } else {
+      window.addEventListener('load', ()=> setTimeout(hidePreloader, 500));
+      setTimeout(hidePreloader, 2200); // safety net if load never fires
+    }
+  }
+
+  // STATS — count up once each number scrolls into view
+  const statEls = Array.from(document.querySelectorAll('.stat-num'));
+  if(statEls.length){
+    const animateStat = (el) => {
+      const target = parseInt(el.dataset.count, 10) || 0;
+      const suffix = el.dataset.suffix || '';
+      if(reduceMotion){ el.textContent = target + suffix; return; }
+      const duration = 1300;
+      const startTime = performance.now();
+      function tick(now){
+        const p = Math.min(1, (now - startTime) / duration);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(target * eased) + suffix;
+        if(p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    };
+    let statsRaf = null;
+    function checkStats(){
+      const vh = window.innerHeight;
+      statEls.forEach(el=>{
+        if(el.dataset.done) return;
+        const rect = el.getBoundingClientRect();
+        if(rect.top < vh * 0.9 && rect.bottom > 0){
+          el.dataset.done = '1';
+          animateStat(el);
+        }
+      });
+      statsRaf = null;
+    }
+    window.addEventListener('scroll', ()=>{ if(!statsRaf) statsRaf = requestAnimationFrame(checkStats); }, { passive:true });
+    checkStats();
+  }
+
+  // MODEL HOVER PREVIEW — floating photo that follows the cursor over each model row
+  const modelPreview = document.getElementById('modelPreview');
+  const modelPreviewImg = document.getElementById('modelPreviewImg');
+  if(modelPreview && modelPreviewImg && window.matchMedia('(hover: hover) and (pointer: fine)').matches){
+    let previewX = 0, previewY = 0, targetX = 0, targetY = 0, previewRaf = null;
+    function movePreview(){
+      previewX += (targetX - previewX) * 0.18;
+      previewY += (targetY - previewY) * 0.18;
+      modelPreview.style.left = previewX + 'px';
+      modelPreview.style.top = previewY + 'px';
+      if(Math.abs(targetX - previewX) > 0.5 || Math.abs(targetY - previewY) > 0.5){
+        previewRaf = requestAnimationFrame(movePreview);
+      } else {
+        previewRaf = null;
+      }
+    }
+    document.querySelectorAll('.model-item[data-img]').forEach(item=>{
+      item.addEventListener('mouseenter', (e)=>{
+        modelPreviewImg.src = item.dataset.img;
+        modelPreview.classList.add('show');
+        targetX = e.clientX; targetY = e.clientY;
+        previewX = targetX; previewY = targetY;
+        modelPreview.style.left = previewX + 'px';
+        modelPreview.style.top = previewY + 'px';
+      });
+      item.addEventListener('mousemove', (e)=>{
+        targetX = e.clientX; targetY = e.clientY;
+        if(!previewRaf) previewRaf = requestAnimationFrame(movePreview);
+      });
+      item.addEventListener('mouseleave', ()=>{
+        modelPreview.classList.remove('show');
+      });
+    });
+  }
+
+  // MODEL PILL TABS — filter categories with a fade/slide transition via direct inline-style manipulation
+  const modelTabs = document.getElementById('modelTabs');
+  if(modelTabs){
+    const tabs = Array.from(modelTabs.querySelectorAll('.model-tab'));
+    const cats = Array.from(document.querySelectorAll('.model-cat[data-cat]'));
+    function showCat(target){
+      tabs.forEach(t => t.classList.toggle('active', t.dataset.target === target));
+      cats.forEach(cat => {
+        if(cat.dataset.cat === target){
+          cat.hidden = false;
+          if(reduceMotion){ cat.style.opacity = '1'; cat.style.transform = 'none'; return; }
+          cat.style.transition = 'none';
+          cat.style.opacity = '0';
+          cat.style.transform = 'translateY(14px)';
+          void cat.offsetHeight; // force reflow so the entrance actually transitions
+          cat.style.transition = '';
+          requestAnimationFrame(()=>{
+            cat.style.opacity = '1';
+            cat.style.transform = 'none';
+          });
+        } else {
+          cat.hidden = true;
+        }
+      });
+    }
+    tabs.forEach(tab => tab.addEventListener('click', ()=> showCat(tab.dataset.target)));
+  }
+
+  // GALLERY CAROUSEL — pagination dots synced to horizontal scroll position
+  const galleryCarousel = document.getElementById('galleryCarousel');
+  const galleryDotsWrap = document.getElementById('galleryDots');
+  if(galleryCarousel && galleryDotsWrap){
+    const cards = Array.from(galleryCarousel.querySelectorAll('.g-card'));
+    cards.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.className = 'gallery-dot' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', () => {
+        cards[i].scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', inline: 'start', block: 'nearest' });
+      });
+      galleryDotsWrap.appendChild(dot);
+    });
+    const dots = Array.from(galleryDotsWrap.children);
+    let galRaf = null;
+    function updateGalleryDots(){
+      const scrollLeft = galleryCarousel.scrollLeft;
+      let closest = 0, closestDist = Infinity;
+      cards.forEach((c, i) => {
+        const dist = Math.abs(c.offsetLeft - galleryCarousel.offsetLeft - scrollLeft);
+        if(dist < closestDist){ closestDist = dist; closest = i; }
+      });
+      dots.forEach((d, i) => d.classList.toggle('active', i === closest));
+      galRaf = null;
+    }
+    galleryCarousel.addEventListener('scroll', () => { if(!galRaf) galRaf = requestAnimationFrame(updateGalleryDots); }, { passive: true });
+    updateGalleryDots();
+  }
+</script>
+
+</body>
+</html>
