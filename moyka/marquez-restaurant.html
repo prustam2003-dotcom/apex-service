@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MARQUEZ — ресторан на Мирабад сквере</title>
+<script src="../notify.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -715,6 +716,7 @@
   reserveForm.addEventListener('submit', (e)=>{
     e.preventDefault();
     const name = document.getElementById('resName').value.trim() || 'Гость';
+    const phone = document.getElementById('resPhone').value.trim();
     const date = document.getElementById('resDate').value;
     const time = document.getElementById('resTime').value;
     const guests = document.getElementById('resGuests').value;
@@ -723,6 +725,16 @@
     resSummary.textContent = name + ', стол на ' + guests + ' гост.' + (date ? ' · ' + date : '') + (time ? ' в ' + time : '') + '. Мы перезвоним для подтверждения.';
     resForm.style.display = 'none';
     resSuccess.style.display = 'block';
+    if(typeof window.apexNotify === 'function'){
+      window.apexNotify('Новая бронь — MARQUEZ', [
+        'Номер: ' + num,
+        'Имя: ' + name,
+        'Телефон: ' + phone,
+        'Гостей: ' + guests,
+        date ? 'Дата: ' + date : '',
+        time ? 'Время: ' + time : '',
+      ].filter(Boolean));
+    }
   });
 
   // REVEAL — continuous scroll-linked reveal, runs the whole page down to the footer

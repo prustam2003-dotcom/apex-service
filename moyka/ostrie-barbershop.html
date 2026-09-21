@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OSTRIE — барбершоп на Мирабад сквере</title>
+<script src="../notify.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!--
@@ -707,6 +708,7 @@
   reserveForm.addEventListener('submit', (e)=>{
     e.preventDefault();
     const name = document.getElementById('resName').value.trim() || 'Гость';
+    const phone = document.getElementById('resPhone').value.trim();
     const date = document.getElementById('resDate').value;
     const time = document.getElementById('resTime').value;
     const service = document.getElementById('resService').value;
@@ -715,6 +717,16 @@
     resSummary.textContent = name + ', ' + service + (date ? ' · ' + date : '') + (time ? ' в ' + time : '') + '. Мы перезвоним для подтверждения.';
     resForm.style.display = 'none';
     resSuccess.style.display = 'block';
+    if(typeof window.apexNotify === 'function'){
+      window.apexNotify('Новая заявка — OSTRIE', [
+        'Номер: ' + num,
+        'Имя: ' + name,
+        'Телефон: ' + phone,
+        'Услуга: ' + service,
+        date ? 'Дата: ' + date : '',
+        time ? 'Время: ' + time : '',
+      ].filter(Boolean));
+    }
   });
 
   // REVEAL — continuous scroll-linked reveal, runs the whole page down to the footer

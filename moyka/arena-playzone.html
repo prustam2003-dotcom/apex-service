@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ARENA — игровая зона для детей от 5 лет</title>
+<script src="../notify.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!--
@@ -755,6 +756,7 @@
   reserveForm.addEventListener('submit', (e)=>{
     e.preventDefault();
     const parentName = document.getElementById('parentName').value.trim() || 'Родитель';
+    const parentPhone = document.getElementById('parentPhone').value.trim();
     const childName = document.getElementById('childName').value.trim() || 'Ребёнок';
     const childAge = document.getElementById('childAge').value;
     const date = document.getElementById('resDate').value;
@@ -765,6 +767,17 @@
     bookSummary.textContent = childName + ' (' + childAge + ' лет), ' + zone + (date ? ' · ' + date : '') + (time ? ' в ' + time : '') + '. Свяжемся с ' + parentName + ' для подтверждения.';
     bookForm.style.display = 'none';
     bookSuccess.style.display = 'block';
+    if(typeof window.apexNotify === 'function'){
+      window.apexNotify('Новая бронь — ARENA', [
+        'Номер: ' + num,
+        'Родитель: ' + parentName,
+        'Телефон: ' + parentPhone,
+        'Ребёнок: ' + childName + ' (' + childAge + ' лет)',
+        'Зона: ' + zone,
+        date ? 'Дата: ' + date : '',
+        time ? 'Время: ' + time : '',
+      ].filter(Boolean));
+    }
   });
 
   // REVEAL — continuous scroll-linked reveal, runs the whole page down to the footer

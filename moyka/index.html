@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>M² — Mirabad Skver</title>
+<script src="../notify.js"></script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23111D33'/%3E%3Ctext x='12' y='45' font-family='Georgia,serif' font-size='34' fill='%23EAAE4E'%3EM%C2%B2%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -1660,12 +1661,14 @@
   requestForm.addEventListener('submit', (e)=>{
     e.preventDefault();
     const name = document.getElementById('requestName').value.trim() || 'Гость';
+    const phone = document.getElementById('requestPhone').value.trim();
     const num = 'M2-' + Math.floor(100000 + Math.random()*900000);
     requestNumber.textContent = num;
     let summary = name + ', заявка по направлению «' + selectedInterest + '»';
+    let masterLine = '';
     if(selectedMasterId){
       const m = findMaster(selectedMasterId);
-      if(m) summary += ' к мастеру ' + m.name;
+      if(m){ summary += ' к мастеру ' + m.name; masterLine = 'Мастер: ' + m.name; }
     }
     summary += ' получена. Мы свяжемся по указанному телефону.';
     requestSummary.textContent = summary;
@@ -1676,6 +1679,14 @@
       renderCabinet();
     }
     showStep(3);
+    if(typeof window.apexNotify === 'function'){
+      window.apexNotify('Новая заявка — M² ' + selectedInterest, [
+        'Номер: ' + num,
+        'Имя: ' + name,
+        'Телефон: ' + phone,
+        masterLine,
+      ].filter(Boolean));
+    }
   });
 
   requestClose.addEventListener('click', closeRequest);
