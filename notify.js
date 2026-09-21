@@ -13,9 +13,7 @@
   var TELEGRAM_BOT_TOKEN = '8907787572:AAFa6z67E55Tyhx4g4p8vXnsXGtCRHO5l5c';
   var TELEGRAM_CHAT_ID = '5344545424';
 
-  // Google Sheets пока не подключены — впишите сюда URL Google Apps Script
-  // Web App, когда он будет готов, чтобы заявки дополнительно писались в таблицу.
-  var GOOGLE_SHEETS_URL = '';
+  var GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzOu_ZhA6ObDqbPb5am2xgvAFge6S7n2xckdOxmjwOK4bfxEHmrtzrxoTiJ0QXnVcg9mA/exec';
 
   function sendTelegram(title, lines) {
     if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) return;
