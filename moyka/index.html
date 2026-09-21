@@ -1395,6 +1395,7 @@
         rateThanks.style.display = 'block';
         renderMastersGrid();
         renderFavoriteMaster();
+        saveMoykaState();
       });
     });
     rateStars.addEventListener('mouseleave', ()=>{
@@ -1442,6 +1443,7 @@
       cabinet.lastVisitMasterId = 'usta-alisher';
     }
     renderCabinet();
+    saveMoykaState();
   });
 
   cabinetPromoBtn.addEventListener('click', ()=>{
@@ -1458,16 +1460,52 @@
       cabinetPromoMsg.textContent = 'Промокод не найден';
     }
     renderCabinet();
+    saveMoykaState();
   });
 
   cabinetLogout.addEventListener('click', ()=>{
-    cabinet = { name:'', bonus:0, tier:'Нет уровня', history:[] };
+    cabinet = { name:'', bonus:0, tier:'Нет уровня', history:[], favoriteMasterId:null, lastVisitMasterId:null, ratedLastVisit:false };
     cabinetGuest.style.display = 'block';
     cabinetUser.style.display = 'none';
     cabinetLoginForm.reset();
     cabinetPromoMsg.textContent = '';
     renderCabinet();
+    saveMoykaState();
   });
+
+  // ================= PERSISTENCE — кабинет и рейтинги мастеров переживают перезагрузку =================
+  const MOYKA_STATE_KEY = 'apex_moyka_state_v1';
+  function saveMoykaState(){
+    try {
+      const masterRatings = {};
+      [].concat(MASTERS.usta, MASTERS.ostrie, MASTERS.siluet).forEach(m=>{
+        masterRatings[m.id] = { rating: m.rating, reviews: m.reviews };
+      });
+      localStorage.setItem(MOYKA_STATE_KEY, JSON.stringify({ cabinet, masterRatings }));
+    } catch(e){}
+  }
+  function loadMoykaState(){
+    try {
+      const raw = localStorage.getItem(MOYKA_STATE_KEY);
+      if(!raw) return;
+      const s = JSON.parse(raw);
+      if(s.cabinet) cabinet = s.cabinet;
+      if(s.masterRatings){
+        [].concat(MASTERS.usta, MASTERS.ostrie, MASTERS.siluet).forEach(m=>{
+          const saved = s.masterRatings[m.id];
+          if(saved){ m.rating = saved.rating; m.reviews = saved.reviews; }
+        });
+      }
+    } catch(e){}
+  }
+  loadMoykaState();
+  if(cabinet.name){
+    cabinetUserName.textContent = cabinet.name;
+    cabinetGuest.style.display = 'none';
+    cabinetUser.style.display = 'block';
+  }
+  renderCabinet();
+  renderMastersGrid();
 
   // Заявка — умный wizard: если интерес уже известен (карта/членство), сразу к контактам;
   // для USTA/OSTRIE/SILUET между интересом и контактами добавляется шаг выбора мастера

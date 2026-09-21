@@ -1087,16 +1087,11 @@ function payUtilitySelected(){
   selected.forEach(i => { i.paid = true; });
   renderDueAmount();
   const names = selected.map(i => i.name).join(', ');
-  const row = document.createElement('div');
-  row.className = 'txn-row';
-  row.innerHTML = `
-    <div class="txn-ic" style="background:#FF6A0022;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FF6A00" stroke-width="1.8"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><path d="M9 12h6M9 16h6"/></svg></div>
-    <div class="txn-body"><div class="txn-title">Оплата ЖКХ · ${names}</div><div class="txn-date">сегодня</div></div>
-    <div class="txn-amount out">−${fmt(total)}</div>`;
-  const list = document.getElementById('txnList');
-  if (list) list.prepend(row);
-  const emptyNote = document.getElementById('txnEmptyNote');
-  if (emptyNote) emptyNote.style.display = 'none';
+  addTxn({
+    title: 'Оплата ЖКХ · ' + names, date: 'сегодня',
+    amount: total, direction: 'out',
+    iconBg: '#FF6A0022', iconStroke: '#FF6A00', iconPath: 'M6 3h9l4 4v14H6zM15 3v4h4M9 12h6M9 16h6',
+  });
   closeSheet();
   showToast('Оплачено ' + fmt(total) + ' сум');
 }
@@ -1269,6 +1264,7 @@ function paymentCards(){
 }
 function setMainCard(i){
   cards.forEach((c, idx) => c.main = idx === i);
+  saveAppState();
   paymentCards();
   showToast('Основная карта обновлена');
 }
@@ -1277,6 +1273,7 @@ function addCard(){
   const digits = (input.value || '').replace(/\D/g, '');
   if (digits.length < 4){ showToast('Введите номер карты'); return; }
   cards.push({ brand: 'Моя карта', last: '•• ' + digits.slice(-4), main: cards.length === 0 });
+  saveAppState();
   showToast('Карта •• ' + digits.slice(-4) + ' привязана');
   paymentCards();
 }
@@ -1304,6 +1301,7 @@ function toggleAutopay(el){
   autopayOn = !autopayOn;
   el.classList.toggle('on', autopayOn);
   el.classList.toggle('off', !autopayOn);
+  saveAppState();
   showToast(autopayOn ? 'Автоплатёж включён' : 'Автоплатёж отключён');
 }
 
@@ -1327,6 +1325,7 @@ function toggleNotif(el, key){
   notifSettings[key] = !notifSettings[key];
   el.classList.toggle('on', notifSettings[key]);
   el.classList.toggle('off', !notifSettings[key]);
+  saveAppState();
 }
 
 /* ================= SUPPORT ================= */
@@ -1405,18 +1404,24 @@ function toggleRequestForm(){
   document.getElementById('newReqTitle').focus();
 }
 let reqCounter = 1051;
+let userRequests = [];
+function requestCardHTML(text, num){
+  return `
+    <div class="service-ic" style="background:var(--tag-new-bg);"><svg viewBox="0 0 24 24" fill="none" stroke="#4A6FA5" stroke-width="1.8" width="18" height="18"><path d="M12 5v14M5 12h14"/></svg></div>
+    <div class="service-body"><div class="service-title">${text}</div><div class="service-sub">№${num} · только что</div></div>
+    <div class="service-tag tag-new">Новое</div>`;
+}
 function submitRequest(){
   const input = document.getElementById('newReqTitle');
   const text = input.value.trim();
   if (!text){ showToast('Опишите, что случилось'); return; }
   reqCounter++;
+  userRequests.unshift({ text, num: reqCounter });
+  saveAppState();
   const card = document.createElement('div');
   card.className = 'service-card';
   card.dataset.status = 'new';
-  card.innerHTML = `
-    <div class="service-ic" style="background:var(--tag-new-bg);"><svg viewBox="0 0 24 24" fill="none" stroke="#4A6FA5" stroke-width="1.8" width="18" height="18"><path d="M12 5v14M5 12h14"/></svg></div>
-    <div class="service-body"><div class="service-title">${text}</div><div class="service-sub">№${reqCounter} · только что</div></div>
-    <div class="service-tag tag-new">Новое</div>`;
+  card.innerHTML = requestCardHTML(text, reqCounter);
   document.getElementById('requestsList').prepend(card);
   input.value = '';
   document.getElementById('newReqPanel').classList.remove('open');
@@ -1424,6 +1429,10 @@ function submitRequest(){
   document.querySelector('#view-requests .chip').classList.add('active');
   document.querySelectorAll('#requestsList .service-card').forEach(c => c.style.display = 'flex');
   showToast('Заявка №' + reqCounter + ' отправлена в УК');
+  notifyTelegram('Новая заявка в УК', [
+    'Номер: №' + reqCounter,
+    'Описание: ' + text,
+  ]);
 }
 function requestsHistory(){
   const items = Array.from(document.querySelectorAll('#requestsList .service-card')).map(c => {
@@ -1436,6 +1445,7 @@ function requestsHistory(){
 
 /* ================= WALLET ================= */
 let walletBalance = 0;
+let walletTxns = [];
 function renderWalletTotals(){
   const heroEl = document.getElementById('walletHeroAmount');
   if (heroEl) heroEl.textContent = fmt(walletBalance) + ' сум';
@@ -1443,6 +1453,23 @@ function renderWalletTotals(){
     const el = document.getElementById(id);
     if (el) el.textContent = fmt(walletBalance) + ' сум';
   });
+}
+function addTxn(txn){
+  walletTxns.unshift(txn);
+  renderTxnList();
+  saveAppState();
+}
+function renderTxnList(){
+  const list = document.getElementById('txnList');
+  const emptyNote = document.getElementById('txnEmptyNote');
+  if (!list) return;
+  list.innerHTML = walletTxns.map(t => `
+    <div class="txn-row">
+      <div class="txn-ic" style="background:${t.iconBg};"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="${t.iconStroke}" stroke-width="1.8"><path d="${t.iconPath}"/></svg></div>
+      <div class="txn-body"><div class="txn-title">${t.title}</div><div class="txn-date">${t.date}</div></div>
+      <div class="txn-amount ${t.direction}">${t.direction === 'in' ? '+' : '−'}${fmt(t.amount)}</div>
+    </div>`).join('');
+  if (emptyNote) emptyNote.style.display = walletTxns.length ? 'none' : 'block';
 }
 function topUp(){
   const c = mainCard();
@@ -1478,16 +1505,11 @@ function confirmTopUp(){
   if (amount <= 0){ showToast('Введите сумму пополнения'); return; }
   walletBalance += amount;
   renderWalletTotals();
-  const row = document.createElement('div');
-  row.className = 'txn-row';
-  row.innerHTML = `
-    <div class="txn-ic" style="background:var(--tag-new-bg);"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A6FA5" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg></div>
-    <div class="txn-body"><div class="txn-title">Пополнение с карты ${mainCard().brand}</div><div class="txn-date">сегодня</div></div>
-    <div class="txn-amount in">+${fmt(amount)}</div>`;
-  const list = document.getElementById('txnList');
-  if (list) list.prepend(row);
-  const emptyNote = document.getElementById('txnEmptyNote');
-  if (emptyNote) emptyNote.style.display = 'none';
+  addTxn({
+    title: 'Пополнение с карты ' + mainCard().brand, date: 'сегодня',
+    amount, direction: 'in',
+    iconBg: 'var(--tag-new-bg)', iconStroke: '#4A6FA5', iconPath: 'M12 5v14M5 12h14',
+  });
   closeSheet();
   showToast('Кошелёк пополнен на ' + fmt(amount) + ' сум');
 }
@@ -1550,6 +1572,7 @@ function confirmMarketOrder(title, price){
   const time = document.querySelector('#marketTimeChips .chip-select.active')?.textContent || '';
   const when = day.toLowerCase() + (time ? ', ' + time : '');
   marketOrdersList.unshift({ title, date: when, price: '−' + price.replace('от ', '') });
+  saveAppState();
   closeSheet();
   showToast('«' + title + '» — заказ на ' + when + ' отправлен партнёру');
 }
@@ -1733,16 +1756,11 @@ function stopCharging(){
   walletBalance -= cost;
   renderWalletTotals();
 
-  const row = document.createElement('div');
-  row.className = 'txn-row';
-  row.innerHTML = `
-    <div class="txn-ic" style="background:var(--tag-new-bg);"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A6FA5" stroke-width="1.8"><path d="${boltPath}"/></svg></div>
-    <div class="txn-body"><div class="txn-title">Зарядка авто · ${stationName}</div><div class="txn-date">сегодня · ${kwh.toFixed(1)} кВт·ч</div></div>
-    <div class="txn-amount out">−${fmt(cost)}</div>`;
-  const list = document.getElementById('txnList');
-  if (list) list.prepend(row);
-  const emptyNote = document.getElementById('txnEmptyNote');
-  if (emptyNote) emptyNote.style.display = 'none';
+  addTxn({
+    title: 'Зарядка авто · ' + stationName, date: 'сегодня · ' + kwh.toFixed(1) + ' кВт·ч',
+    amount: cost, direction: 'out',
+    iconBg: 'var(--tag-new-bg)', iconStroke: '#4A6FA5', iconPath: boltPath,
+  });
 
   chargingHistoryList.unshift({ station: stationName, date: 'сегодня', kwh, cost });
   chargingWalletTotal += cost;
@@ -1750,6 +1768,7 @@ function stopCharging(){
     const mini = document.getElementById(id);
     if (mini) mini.textContent = fmt(chargingWalletTotal) + ' сум';
   });
+  saveAppState();
 
   chargingSession = null;
   closeSheet();
@@ -1785,6 +1804,7 @@ function addCar(){
   const plate = (document.getElementById('carPlate').value || '').trim();
   if (!model || !plate){ showToast('Заполните модель и госномер'); return; }
   myCars.push({ model, plate });
+  saveAppState();
   showToast('Автомобиль добавлен');
   myVehicles();
 }
@@ -1792,6 +1812,64 @@ function addCar(){
 /* ================= CAR WASH · PARTNER SITE (M² Mirabad Skver) ================= */
 function openCarWashSite(){
   location.href = 'moyka/index.html';
+}
+
+/* ================= PERSISTENCE — данные переживают перезагрузку страницы ================= */
+const APEX_STATE_KEY = 'apex_app_state_v1';
+function saveAppState(){
+  try {
+    localStorage.setItem(APEX_STATE_KEY, JSON.stringify({
+      walletBalance, utilityItems, marketOrdersList, myCars, cards,
+      autopayOn, notifSettings, walletTxns, chargingHistoryList, chargingWalletTotal,
+      userRequests, reqCounter,
+    }));
+  } catch (e){}
+}
+function loadAppState(){
+  try {
+    const raw = localStorage.getItem(APEX_STATE_KEY);
+    if (!raw) return;
+    const s = JSON.parse(raw);
+    if (s.walletBalance != null) walletBalance = s.walletBalance;
+    if (s.utilityItems) utilityItems = s.utilityItems;
+    if (s.marketOrdersList) marketOrdersList = s.marketOrdersList;
+    if (s.myCars) myCars = s.myCars;
+    if (s.cards) cards = s.cards;
+    if (s.autopayOn != null) autopayOn = s.autopayOn;
+    if (s.notifSettings) notifSettings = s.notifSettings;
+    if (s.walletTxns) walletTxns = s.walletTxns;
+    if (s.chargingHistoryList) chargingHistoryList = s.chargingHistoryList;
+    if (s.chargingWalletTotal != null) chargingWalletTotal = s.chargingWalletTotal;
+    if (s.userRequests) userRequests = s.userRequests;
+    if (s.reqCounter != null) reqCounter = s.reqCounter;
+  } catch (e){}
+}
+/* ================= NOTIFICATIONS — заглушка до подключения notify.js ================= */
+function notifyTelegram(title, lines){
+  if (typeof window.apexNotify === 'function'){
+    window.apexNotify(title, lines);
+  }
+}
+
+loadAppState();
+renderDueAmount();
+renderWalletTotals();
+renderTxnList();
+['chargingMiniHome', 'chargingMiniWallet'].forEach(id => {
+  const mini = document.getElementById(id);
+  if (mini) mini.textContent = fmt(chargingWalletTotal) + ' сум';
+});
+if (userRequests.length){
+  const list = document.getElementById('requestsList');
+  if (list){
+    userRequests.slice().reverse().forEach(r => {
+      const card = document.createElement('div');
+      card.className = 'service-card';
+      card.dataset.status = 'new';
+      card.innerHTML = requestCardHTML(r.text, r.num);
+      list.prepend(card);
+    });
+  }
 }
 
 renderChargingCard();
